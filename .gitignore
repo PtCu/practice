@@ -1,0 +1,7 @@
+*.exe
+# *.txt
+.vscode
+*.code-workspace
+build
+# *.vcproj*
+*pdf

@@ -1,0 +1,56 @@
+#
+# @lc app=leetcode.cn id=70 lang=python3
+#
+# [70] 爬楼梯
+#
+# https://leetcode-cn.com/problems/climbing-stairs/description/
+#
+# algorithms
+# Easy (48.03%)
+# Likes:    892
+# Dislikes: 0
+# Total Accepted:    158.6K
+# Total Submissions: 329.6K
+# Testcase Example:  '2'
+#
+# 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+# 
+# 每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+# 
+# 注意：给定 n 是一个正整数。
+# 
+# 示例 1：
+# 
+# 输入： 2
+# 输出： 2
+# 解释： 有两种方法可以爬到楼顶。
+# 1.  1 阶 + 1 阶
+# 2.  2 阶
+# 
+# 示例 2：
+# 
+# 输入： 3
+# 输出： 3
+# 解释： 有三种方法可以爬到楼顶。
+# 1.  1 阶 + 1 阶 + 1 阶
+# 2.  1 阶 + 2 阶
+# 3.  2 阶 + 1 阶
+# 
+# 
+#
+from typing import List
+# @lc code=start
+class Solution:
+    #dp法
+    def climbStairs(self, n: int)-> int:
+        if n==1:
+            return 1
+        step=[0]*(n+1)
+        step[1]=1;step[2]=2
+        for i in range(3,n+1):
+            step[i]=step[i-1]+step[i-2]
+        return step[n]
+# @lc code=end
+if __name__ == "__main__":
+    n=int(input())
+    print(Solution().climbStairs(n))
