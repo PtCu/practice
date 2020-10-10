@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 constexpr double pi = 3.1415926;
-#define CASE2
+#define CASE1
 #ifdef CASE1
 constexpr double gamma = 3.14159265358979 / 2;
 constexpr double x1 = 4, x2 = 0, y2 = 4;
@@ -34,18 +34,41 @@ int main()
 {
 
     double x0 = -pi, f0 = f(x0);
-    double x1 = pi, f1 = f(x1);
-    double x2;
+    double x1 = 0, f1 = f(x1);
     int i;
-    for ( i = 0;; i++)
+    double x2;
+
+    for (i = 0;; i++)
     {
-        x2 = x1 - f(x1) * (x1 - x0) / (f(x1) - f(x0));
-        if (abs(f(x1)) < 1e-5)
+        x2 = x1 - f1 * ((x1 - x0) / (f1 - f0));
+        double f2 = f(x2);
+        if (abs(f1) < 1e-5)
             break;
         x0 = x1;
         x1 = x2;
-        
+        f0 = f1;
+        f1 = f2;
     }
-        
-    cout << x2<<endl<<i<<endl;
+    cout << x2 << endl
+         << i << endl;
+
+    x0 = 0;
+    f0 = f(x0);
+    x1 = pi;
+    f1 = f(x1);
+
+    for (i = 0;; i++)
+    {
+        x2 = x1 - f1 * ((x1 - x0) / (f1 - f0));
+        double f2 = f(x2);
+        if (abs(f1) < 1e-5)
+            break;
+        x0 = x1;
+        x1 = x2;
+        f0 = f1;
+        f1 = f2;
+    }
+
+    cout << x2 << endl
+         << i << endl;
 }
