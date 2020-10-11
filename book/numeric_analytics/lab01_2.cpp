@@ -433,6 +433,7 @@ int main()
     }
     cout << "*************************************************************" << endl;
 
+
     cout << "*******比较my_isqrt_op,my_isqrt,isqrt2,isqrt3,isqrt4*********" << endl;
     cout << "在[1,(2^8+1)^2)上" << endl;
     //构造二叉树
@@ -456,10 +457,6 @@ int main()
     }
     QueryPerformanceCounter(&stop);
     time_cost[5] = (double)(stop.QuadPart - start.QuadPart) / (double)tc.QuadPart;
-    cout << setw(12) << left << "sqrt";
-    cout << setw(12) << left << "无";
-    cout << setw(15) << time_cost[5];
-    cout << setw(10) << "/" << endl;
 
     //比较各个方法的用时
     for (int i = 0; i < 5; i++)
@@ -486,6 +483,10 @@ int main()
          << setw(12) << left << "误差"
          << setw(15) << left << "时间"
          << setw(10) << left << "平均迭代次数" << endl;
+    cout << setw(12) << left << "sqrt";
+    cout << setw(12) << left << "无";
+    cout << setw(15) << time_cost[5];
+    cout << setw(10) << "/" << endl;
     for (int i = 0; i < 5; i++)
     {
         switch (i)
@@ -538,10 +539,7 @@ int main()
 
     QueryPerformanceCounter(&stop);
     time_cost[5] = (double)(stop.QuadPart - start.QuadPart) / (double)tc.QuadPart;
-    cout << setw(12) << left << "sqrt";
-    cout << setw(12) << left << "无";
-    cout << setw(15) << time_cost[5];
-    cout << setw(10) << "/" << endl;
+   
     //比较各个方法的用时
     for (int i = 0; i < 5; i++)
     {
@@ -567,6 +565,10 @@ int main()
          << setw(12) << left << "误差"
          << setw(15) << left << "时间"
          << setw(10) << left << "平均迭代次数" << endl;
+    cout << setw(12) << left << "sqrt";
+    cout << setw(12) << left << "无";
+    cout << setw(15) << time_cost[5];
+    cout << setw(10) << "/" << endl;
     for (int i = 0; i < 5; i++)
     {
         switch (i)
@@ -594,7 +596,7 @@ int main()
         else
             cout << setw(12) << left << "无";
         cout << setw(15) << time_cost[i];
-        cout << setw(10) << (double)times[i] / mid << endl;
+        cout << setw(10) << (double)times[i] / (max_n-mid) << endl;
     }
     cout << "*************************************************************" << endl;
 }
