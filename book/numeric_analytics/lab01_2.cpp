@@ -1,67 +1,6 @@
 #include <bits/stdc++.h>
 #include <windows.h>
 using namespace std;
-// const int N = 16;
-// const int MAX = 9999999;
-// float p[N + 1] = {
-//     0,
-//     0,
-//     0,
-//     0,
-//     0,
-//     0,
-//     0,
-//     0,
-//     0,
-//     0,
-//     0,
-//     0,
-// };
-// float q[N + 1] = {0, 1.0 / 128, 1.0 / 64, 1.0 / 32, 1.0 / 16, 1.0 / 8, 1.0 / 4, 1.0 / 2, 0, 0, 0, 0, 0, 0, 0, 0};
-
-// float e[N + 2][N + 1];
-// int root[N + 1][N + 1];
-// float w[N + 2][N + 1];
-
-// void optimal_bst_search_tree(float p[], float q[], int n)
-// {
-//     int i;
-//     for (i = 1; i <= n + 1; i++)
-//     {
-//         e[i][i - 1] = q[i - 1];
-//         w[i][i - 1] = q[i - 1];
-//     }
-//     int l, j, r;
-//     for (l = 1; l <= n; l++)
-//     {
-//         for (i = 1; i <= n - l + 1; i++) //步长
-//         {
-//             j = i + l - 1;
-//             e[i][j] = MAX;
-//             w[i][j] = w[i][j - 1] + p[j] + q[j];
-//             for (r = i; r <= j; r++)
-//             {
-//                 double t = e[i][r - 1] + e[r + 1][j] + w[i][j];
-//                 if (t < e[i][j])
-//                 {
-//                     e[i][j] = t;
-//                     root[i][j] = r;
-//                 }
-//             }
-//         }
-//     }
-// }
-
-// void construct_optimal_bst(int i, int j)
-// {
-//     if (i <= j)
-//     {
-//         int r = root[i][j];
-//         cout << r << " ";
-//         construct_optimal_bst(i, r - 1);
-//         construct_optimal_bst(r + 1, j);
-//     }
-// }
 
 /*
 二分查找的函数有 3 个： 
@@ -299,27 +238,117 @@ unsigned int isqrt4(unsigned M, unsigned long long &times)
     }
     return N;
 }
+
+struct Node
+{
+    int l, r;
+    unsigned long v;
+    Node() : l(-1), r(-1) {}
+    Node(int left, int right, unsigned value) : l(left), r(right), v(value) {}
+} Tree[16];
+
+void init_opt_bst()
+{
+    Tree[8] = Node(7, 13, 257 * 257);
+    for (int i = 7; i >= 0; i--)
+    { //左侧0到8节点为线性排列
+        Tree[i] = Node(i - 1, -1, ((1 << i) + 1) * ((1 << i) + 1));
+    }
+
+    //右侧由于概率为0，理论上可以随意排列。这里尽可能将其高度减小
+    Tree[13] = Node(11, 15, 8193 * 8193);
+    Tree[11] = Node(10, 12, 2049 * 2049);
+    Tree[10] = Node(9, -1, 1025 * 1025);
+    Tree[12] = Node(-1, -1, 4097 * 4097);
+    Tree[14] = Node(-1, -1, 8193 * 8193);
+    Tree[15] = Node(14, 16, 16385 * 16385);
+    Tree[16] = Node(-1, -1, 32769 * 32769);
+}
+unsigned int my_isqrt_op(unsigned x)
+{
+    int p = 8;
+    int q = 0; //尾随p的指针
+    int s = 0;
+    for (;;)
+    {
+        if (p == -1)
+        {
+            s = q + 1;
+            break;
+        }
+        q = p;
+        x < Tree[p].v ? p = Tree[p].l : p = Tree[p].r;
+    }
+
+    unsigned int x0 = 1 << s;               //x0为上界
+    unsigned int x1 = (x0 + (x >> s)) >> 1; //x0为上界,x>>s为下界(即 (x0)^2/(2^s) ) (可证明)
+
+    while (x1 < x0)
+    {
+        x0 = x1;
+        x1 = (x0 + x / x0) >> 1;
+    }
+    return x0;
+}
+unsigned int my_isqrt_op(unsigned x, unsigned long long &times)
+{
+    int p = 8;
+    int q = 0; //尾随p的指针
+    int s = 0;
+    for (;;)
+    {
+        if (p == -1)
+        {
+            s = q + 1;
+            break;
+        }
+        q = p;
+        x < Tree[p].v ? p = Tree[p].l : p = Tree[p].r;
+    }
+
+    unsigned int x0 = 1 << s;               //x0为上界
+    unsigned int x1 = (x0 + (x >> s)) >> 1; //x0为上界,x>>s为下界(即 (x0)^2/(2^s) ) (可证明)
+
+    while (x1 < x0)
+    {
+        times++;
+        x0 = x1;
+        x1 = (x0 + x / x0) >> 1;
+    }
+    return x0;
+}
 int main()
 {
-    unsigned (*isqrt_f[4])(unsigned x);
+    unsigned (*isqrt_f[5])(unsigned x);
     isqrt_f[0] = my_isqrt;
     isqrt_f[1] = isqrt2;
     isqrt_f[2] = isqrt3;
     isqrt_f[3] = isqrt4;
+    isqrt_f[4] = my_isqrt_op;
 
-    cout << "********************************" << endl;
+    //为了比较每个方法的迭代次数的重载函数
+    unsigned (*isqrt_f_t[5])(unsigned x, unsigned long long &t);
+    isqrt_f_t[0] = my_isqrt;
+    isqrt_f_t[1] = isqrt2;
+    isqrt_f_t[2] = isqrt3;
+    isqrt_f_t[3] = isqrt4;
+    isqrt_f_t[4] = my_isqrt_op;
+
+    cout << "*************************************************************" << endl;
+    cout << "**************比较my_isqrt,isqrt2,isqrt3,isqrt4**************" << endl;
     cout << setw(12) << left << "函数"
          << setw(12) << left << "误差"
          << setw(15) << left << "时间"
          << setw(10) << left << "平均迭代次数" << endl;
 
     LARGE_INTEGER start, stop, tc;
-    double time_cost[5];
-    bool hasError[4];
+    double time_cost[6];         //耗时
+    bool hasError[5];            //是否有误差
+    unsigned long long times[5]; //迭代次数
     memset(time_cost, 0, sizeof(time_cost));
     memset(hasError, 0, sizeof(time_cost));
 
-    unsigned long max_n = 1UL << 31; //2^32
+    constexpr unsigned long max_n = 1UL << 31; //2^32
 
     int count = 0;
     for (unsigned long source = 1; source < max_n; source++)
@@ -348,9 +377,8 @@ int main()
     {
         sqrt(source);
     }
-
     QueryPerformanceCounter(&stop);
-    time_cost[4] = (double)(stop.QuadPart - start.QuadPart) / (double)tc.QuadPart;
+    time_cost[5] = (double)(stop.QuadPart - start.QuadPart) / (double)tc.QuadPart;
 
     //比较各个方法的用时
     for (int i = 0; i < 4; i++)
@@ -364,14 +392,6 @@ int main()
         time_cost[i] = (double)(stop.QuadPart - start.QuadPart) / (double)tc.QuadPart;
     }
 
-    //为了比较每个方法的迭代次数的重载函数
-    unsigned (*isqrt_f_t[4])(unsigned x, unsigned long long &t);
-    isqrt_f_t[0] = my_isqrt;
-    isqrt_f_t[1] = isqrt2;
-    isqrt_f_t[2] = isqrt3;
-    isqrt_f_t[3] = isqrt4;
-
-    unsigned long long times[4];
     memset(times, 0, sizeof(times));
     for (int i = 0; i < 4; i++)
     {
@@ -383,7 +403,7 @@ int main()
     }
     cout << setw(12) << left << "sqrt";
     cout << setw(12) << left << "无";
-    cout << setw(15) << time_cost[4];
+    cout << setw(15) << time_cost[5];
     cout << setw(10) << "/" << endl;
     for (int i = 0; i < 4; i++)
     {
@@ -411,4 +431,170 @@ int main()
         cout << setw(15) << time_cost[i];
         cout << setw(10) << (double)times[i] / max_n << endl;
     }
+    cout << "*************************************************************" << endl;
+
+    cout << "*******比较my_isqrt_op,my_isqrt,isqrt2,isqrt3,isqrt4*********" << endl;
+    cout << "在[1,(2^8+1)^2)上" << endl;
+    //构造二叉树
+    init_opt_bst();
+    unsigned long mid = (1 << 8 + 1) * (1 << 8 + 1);
+    //误差比较
+    for (unsigned long source = 1; source < mid; source++)
+    {
+        unsigned int standard = (int)sqrt(source);
+        if (isqrt_f[4](source) - standard)
+        {
+            hasError[4] = true;
+        }
+    }
+
+    //记录标准库的用时
+    QueryPerformanceCounter(&start);
+    for (unsigned long source = 1; source < mid; source++)
+    {
+        sqrt(source);
+    }
+    QueryPerformanceCounter(&stop);
+    time_cost[5] = (double)(stop.QuadPart - start.QuadPart) / (double)tc.QuadPart;
+    cout << setw(12) << left << "sqrt";
+    cout << setw(12) << left << "无";
+    cout << setw(15) << time_cost[5];
+    cout << setw(10) << "/" << endl;
+
+    //比较各个方法的用时
+    for (int i = 0; i < 5; i++)
+    {
+        QueryPerformanceCounter(&start);
+        for (unsigned int source = 1; source < mid; source++)
+        {
+            isqrt_f[i](source);
+        }
+        QueryPerformanceCounter(&stop);
+        time_cost[i] = (double)(stop.QuadPart - start.QuadPart) / (double)tc.QuadPart;
+    }
+
+    //比较迭代次数
+    memset(times, 0, sizeof(times));
+    for (int i = 0; i < 5; i++)
+    {
+        for (unsigned int source = 1; source < mid; source++)
+        {
+            isqrt_f_t[i](source, times[i]);
+        }
+    }
+    cout << setw(12) << left << "函数"
+         << setw(12) << left << "误差"
+         << setw(15) << left << "时间"
+         << setw(10) << left << "平均迭代次数" << endl;
+    for (int i = 0; i < 5; i++)
+    {
+        switch (i)
+        {
+        case 0:
+            cout << setw(12) << left << "my_isqrt";
+            break;
+        case 1:
+            cout << setw(12) << left << "isqrt2";
+            break;
+        case 2:
+            cout << setw(12) << left << "isqrt3";
+            break;
+        case 3:
+            cout << setw(12) << left << "isqrt4";
+            break;
+        case 4:
+            cout << setw(12) << left << "my_isqrt_op";
+            break;
+        default:
+            break;
+        }
+        if (hasError[i])
+            cout << setw(12) << left << "有";
+        else
+            cout << setw(12) << left << "无";
+        cout << setw(15) << time_cost[i];
+        cout << setw(10) << (double)times[i] / mid << endl;
+    }
+    cout << "*************************************************************" << endl;
+
+    cout << "在[(2^8+1)^2,(2^16+1)^2)上" << endl;
+
+   
+    //误差比较
+    for (unsigned long source = mid; source < max_n; source++)
+    {
+        unsigned int standard = (int)sqrt(source);
+        if (isqrt_f[4](source) - standard)
+        {
+            hasError[4] = true;
+        }
+    }
+    QueryPerformanceCounter(&start);
+    //记录标准库的用时
+    for (unsigned long source = mid; source < max_n; source++)
+    {
+        sqrt(source);
+    }
+
+    QueryPerformanceCounter(&stop);
+    time_cost[5] = (double)(stop.QuadPart - start.QuadPart) / (double)tc.QuadPart;
+    cout << setw(12) << left << "sqrt";
+    cout << setw(12) << left << "无";
+    cout << setw(15) << time_cost[5];
+    cout << setw(10) << "/" << endl;
+    //比较各个方法的用时
+    for (int i = 0; i < 5; i++)
+    {
+        QueryPerformanceCounter(&start);
+        for (unsigned int source = mid; source < max_n; source++)
+        {
+            isqrt_f[i](source);
+        }
+        QueryPerformanceCounter(&stop);
+        time_cost[i] = (double)(stop.QuadPart - start.QuadPart) / (double)tc.QuadPart;
+    }
+
+    //比较迭代次数
+    memset(times, 0, sizeof(times));
+    for (int i = 0; i < 5; i++)
+    {
+        for (unsigned int source = mid; source < max_n; source++)
+        {
+            isqrt_f_t[i](source, times[i]);
+        }
+    }
+    cout << setw(12) << left << "函数"
+         << setw(12) << left << "误差"
+         << setw(15) << left << "时间"
+         << setw(10) << left << "平均迭代次数" << endl;
+    for (int i = 0; i < 5; i++)
+    {
+        switch (i)
+        {
+        case 0:
+            cout << setw(12) << left << "my_isqrt";
+            break;
+        case 1:
+            cout << setw(12) << left << "isqrt2";
+            break;
+        case 2:
+            cout << setw(12) << left << "isqrt3";
+            break;
+        case 3:
+            cout << setw(12) << left << "isqrt4";
+            break;
+        case 4:
+            cout << setw(12) << left << "my_isqrt_op";
+            break;
+        default:
+            break;
+        }
+        if (hasError[i])
+            cout << setw(12) << left << "有";
+        else
+            cout << setw(12) << left << "无";
+        cout << setw(15) << time_cost[i];
+        cout << setw(10) << (double)times[i] / mid << endl;
+    }
+    cout << "*************************************************************" << endl;
 }

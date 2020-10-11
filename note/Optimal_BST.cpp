@@ -8,24 +8,13 @@ using namespace std;
 const int N = 16;
 const int MAX = 9999999;
 float p[N + 1] = {
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-};
-float q[N + 1] = {0, 1.0 / 128, 1.0 / 64, 1.0 / 32, 1.0 / 16, 1.0 / 8, 1.0 / 4, 1.0 / 2, 0, 0, 0, 0, 0, 0, 0, 0};
+    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+float q[N + 2] = {
+    0,1.0 / 128,1.0 / 128,1.0 / 64,1.0 / 32,1.0 / 16,1.0 / 8,1.0 / 4,1.0 / 2,0,0,0, 0, 0,0,0,0,0};
 
-float e[N + 2][N + 1];
-int root[N + 1][N + 1];
-float w[N + 2][N + 1];
+float e[N + 2][N + 1];  //子树期望代价
+int root[N + 1][N + 1]; //记录根节点
+float w[N + 2][N + 1];  //子树概率总和
 
 void optimal_bst_search_tree(float p[], float q[], int n)
 {
@@ -101,4 +90,5 @@ int main()
     construct_optimal_bst(1, N);
     cout << endl;
     print_bst(1, N);
+    cout << 1 + 3.0 / 4 + 0.5 + 5.0 / 16 + 6.0 / 32 + 7.0 / 64 + 8.0 / 128 + 9.0 / 128 << endl;
 }
