@@ -1,3 +1,4 @@
+//非标准tsp。
 #include <iostream>
 const int MAX = 1e6;
 typedef struct Arc
@@ -46,6 +47,7 @@ int main() {
         scanf("%d %d", &a, &b);
         a--;
         b--;
+        //有向图，从a到b
         Arc* B = new Arc(b);
         B->next = nodelist[a].firstArc;
         nodelist[a].firstArc = B;
