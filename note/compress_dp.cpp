@@ -12,31 +12,12 @@ float calDistance(const Point &a, const Point &b)
     return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
 }
 
-// vector<bool> visited;
-// float ans = INT32_MAX;
-// void dfs(int j, const Point &k, float sum)
-// {
-//     if (j == n)
-//     {
-//         ans = min(ans, sum);
-//         return;
-//     }
-
-//     for (int i = 0; i < n; i++)
-//     {
-//         if (visited[i])
-//             continue;
-//         visited[i] = true;
-//         dfs(j + 1, points[i], sum + calDistance(points[i], k));
-//         visited[i] = false;
-//     }
-// }
-
 // i=5~000101表示点1和点3已被访问
 // dp[i][j]表示分析在当前的状态i下，路径都为已经访问过的城市，找一条最短路径到达的j的总距离
 //        相应的状态转移方程为dp[ i ][ j]=min(dp[ i ][ j], dp[ i ^ (1<<j) ][ k ] + dis[ k ][ j ]  );
 //  i ^ (1<<j)的意思是将j这个城市从i状态中去掉。 dis[ k][ j ] 是k和j之间的距离。
 // if (i&(1<<(j - 1))) 表示判断j是否被访问过
+
 float dp[35000][20];
 int main()
 {
@@ -50,8 +31,8 @@ int main()
         cin >> a >> b;
         points.push_back(Point(a, b));
     }
-    //O(n^2*2^n) 
     memset(dp, 127, sizeof(dp)); //填充为1<<127
+    //O(n^2*2^n) 
     for (int i = 0; i < (1 << n); ++i) //所有状态
     {
         for (int j = 0; j < n; ++j)
