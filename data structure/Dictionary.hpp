@@ -1,4 +1,5 @@
-template <typename K,typename V>struct Dictionary
+template <typename K,typename V>
+struct Dictionary
 {
     virtual int size() const = 0; //当前词条总数
     virtual bool put() = 0; //插入词条
