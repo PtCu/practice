@@ -20,7 +20,7 @@ int brute(int index, int capacity)
         return 0;
     //不放第i个的价值
     int res = brute(index - 1, capacity);
-    //权衡是否能放第i个物品
+    //权衡是否放第i个物品
     if (capacity >= stuffs[index].weight)
     {
         //如果能放下，就看是放下此物品的价值大还是不放的价值大
