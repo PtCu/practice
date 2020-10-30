@@ -50,4 +50,5 @@ int main()
     cout << "最大价值为" << endl;
     trace(0);
     cout << ans;
+    
 }
