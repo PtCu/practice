@@ -3,21 +3,22 @@ using namespace std;
 const int maxn = 100;
 struct Stuff
 {
-    int value;
-    int weight;
+    int value;  //价值
+    int weight; //重量
     Stuff(){};
     Stuff(const int &v, const int &w) : value(v), weight(w) {}
 };
 
 vector<Stuff> stuffs;
-int capacity;
-int cur_cap;
-int cur_v;
-int ans = -1;
+int capacity; //背包总容量
+int cur_cap;  //当前背包容量
+int cur_v;    //当前背包价值
+int ans = -1; //结果
+
 void trace(int x)
 {
     //到达叶节点
-    if (x >stuffs.size()-1)
+    if (x > stuffs.size() - 1)
     {
         ans = max(ans, cur_v);
         return;
@@ -42,6 +43,7 @@ int main()
     cin >> capacity >> M;
     cur_cap = capacity;
     int v, w;
+    cout << "输入物品的重量、价值" << endl;
     for (int i = 0; i < M; i++)
     {
         cin >> w >> v;
@@ -50,5 +52,4 @@ int main()
     cout << "最大价值为" << endl;
     trace(0);
     cout << ans;
-    
 }
