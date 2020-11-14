@@ -46,7 +46,7 @@ Node* newNode(int mat[N][N], int x, int y, int newX,
 	node->parent = parent; 
 
 	// copy data from parent node to current node 
-	memcpy(node->mat, mat, sizeof node->mat); 
+	memcpy(node->mat, mat, sizeof(node->mat)); 
 
 	// move tile by 1 position 
 	swap(node->mat[x][y], node->mat[newX][newY]); 
@@ -163,33 +163,45 @@ void solve(int initial[N][N], int x, int y,
 		} 
 	} 
 } 
+int main()
+{
+    int init[N][N] = {{2, 8, 3},
+                      {1, 6, 4},
+                      {7, 0, 5}};
 
-// Driver code 
-int main() 
-{ 
-	// Initial configuration 
-	// Value 0 is used for empty space 
-	int initial[N][N] = 
-	{ 
-		{1, 2, 3}, 
-		{5, 6, 0}, 
-		{7, 8, 4} 
-	}; 
+    int final[N][N] = {{1, 2, 3},
+                       {8, 0, 4},
+                       {7, 6, 5}};
+    solve(init, 2, 1, final);
+    return 0;
+}
 
-	// Solvable Final configuration 
-	// Value 0 is used for empty space 
-	int final[N][N] = 
-	{ 
-		{1, 2, 3}, 
-		{5, 8, 6}, 
-		{0, 7, 4} 
-	}; 
+// // Driver code 
+// int main() 
+// { 
+// 	// Initial configuration 
+// 	// Value 0 is used for empty space 
+// 	int initial[N][N] = 
+// 	{ 
+// 		{1, 2, 3}, 
+// 		{5, 6, 0}, 
+// 		{7, 8, 4} 
+// 	}; 
 
-	// Blank tile coordinates in initial 
-	// configuration 
-	int x = 1, y = 2; 
+// 	// Solvable Final configuration 
+// 	// Value 0 is used for empty space 
+// 	int final[N][N] = 
+// 	{ 
+// 		{1, 2, 3}, 
+// 		{5, 8, 6}, 
+// 		{0, 7, 4} 
+// 	}; 
 
-	solve(initial, x, y, final); 
+// 	// Blank tile coordinates in initial 
+// 	// configuration 
+// 	int x = 1, y = 2; 
 
-	return 0; 
-} 
+// 	solve(initial, x, y, final); 
+
+// 	return 0; 
+// } 
