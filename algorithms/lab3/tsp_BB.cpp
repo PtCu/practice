@@ -1,193 +1,185 @@
-// C++ program to solve Traveling Salesman Problem 
-// using Branch and Bound. 
-#include <bits/stdc++.h> 
-using namespace std; 
-const int N = 4; 
+#include <bits/stdc++.h>
+using namespace std;
+const int maxn = 10 + 1;
 
-// final_path[] stores the final solution ie, the 
-// path of the salesman. 
-int final_path[N+1]; 
+//节点数量
+int N;
+//记录这些节点是否访问过
+bool visited[maxn];
+//记录最终的最小代价
+int final_res = INT_MAX;
+//保存最终路径
+int final_path[maxn + 1];
 
-// visited[] keeps track of the already visited nodes 
-// in a particular path 
-bool visited[N]; 
+//求节点i的最小邻居
+int firstMin(const vector<vector<int>> &mat, int i)
+{
+    int min = INT_MAX;
+    for (int k = 0; k < N; ++k)
+    {
+        if (mat[i][k] < min && k != i)
+            min = mat[i][k];
+    }
+    return min;
+}
 
-// Stores the final minimum weight of shortest tour. 
-int final_res = INT_MAX; 
+//求节点i的第二小邻居
+int secondMin(const vector<vector<int>> &mat, int i)
+{
+    int first = INT_MAX, second = INT_MAX; //第一小的，第二小的
+    for (int j = 0; j < N; ++j)
+    {
+        if (i == j)
+            continue;
+        if (mat[i][j] < first)
+        {
+            first = mat[i][j];
+            second = first;
+        }
+        else if (mat[i][j] < second && mat[i][j] > first)
+        {
+            second = mat[i][j];
+        }
+    }
+    return second;
+}
 
-// Function to copy temporary solution to 
-// the final solution 
-void copyToFinal(int curr_path[]) 
-{ 
-	for (int i=0; i<N; i++) 
-		final_path[i] = curr_path[i]; 
-	final_path[N] = curr_path[0]; 
-} 
+//cur_bound：根节点的下界
+//cur_weight：从根节点到现在的路径的代价
+//level：空间树的层级
+//cur_path：记录路径
+void recur(const vector<vector<int>> &mat, int cur_bound, int cur_weight, int level, int cur_path[])
+{
+    //递归基：如果到达叶子节点,即到达level N,说明所有地点都走了一遍
+    if (level == N)
+    {
+        //如果最后一个节点到第一个节点还有路径
+        if (mat[cur_path[level - 1]][cur_path[0]] != 0)
+        {
+            //将这条路径的代价加上去
+            int cur_res = cur_weight + mat[cur_path[level - 1]][cur_path[0]];
+            //如果当前路径更好
+            if (cur_res < final_res)
+            {
+                final_res = cur_res;
+                //覆盖最终结果
+                copy(cur_path, cur_path + N, final_path);
+            }
+        }
+        return;
+    }
+    //对邻接顶点构建查找树
+    for (int i = 0; i < N; ++i)
+    {
+        //对于level-1，如果没有访问过邻居i并且存在level-1到i的路径
+        if (mat[cur_path[level - 1]][i] != 0 && !visited[i])
+        {
+            int temp = cur_bound;
+            //加上这条边的代价
+            cur_weight += mat[cur_path[level - 1]][i];
 
-// Function to find the minimum edge cost 
-// having an end at the vertex i 
-int firstMin(int adj[N][N], int i) 
-{ 
-	int min = INT_MAX; 
-	for (int k=0; k<N; k++) 
-		if (adj[i][k]<min && i != k) 
-			min = adj[i][k]; 
-	return min; 
-} 
+            //调整当前节点的下界使得下界更接近真实值
+            //节点0需要减去节点0和节点1的最小边的一半，再加上边0-1，即
+//             Lower Bound for vertex 1 = 
+//    Old lower bound - ((minimum edge cost of 0 + 
+//                     minimum edge cost of 1) / 2) 
+//                   + (edge cost 0-1)
+            if (level == 1)
+            {
+                cur_bound -= ((firstMin(mat, cur_path[level - 1]) + firstMin(mat, i)) / 2);
+            }
+            //对于其他节点level-1，由于level-1的最小边已经在level-2中减去，所以在level-1中应当减去第二小的边。
+            //同时要减去邻居的最小边（也就是子节点的最小边）
+            //最后加上边(level-1)-i
+            else
+            {
+                cur_bound -= ((secondMin(mat, cur_path[level - 1]) + firstMin(mat, i)) / 2);
+            }
 
-// function to find the second minimum edge cost 
-// having an end at the vertex i 
-int secondMin(int adj[N][N], int i) 
-{ 
-	int first = INT_MAX, second = INT_MAX; 
-	for (int j=0; j<N; j++) 
-	{ 
-		if (i == j) 
-			continue; 
+            //下界为cur_bound+cur_weight。如果下界小于当前结果说明有搞头要继续深入查找
+            if (cur_bound + cur_weight < final_res)
+            {
+                cur_path[level] = i;
+                visited[i] = true;
 
-		if (adj[i][j] <= first) 
-		{ 
-			second = first; 
-			first = adj[i][j]; 
-		} 
-		else if (adj[i][j] <= second && 
-				adj[i][j] != first) 
-			second = adj[i][j]; 
-	} 
-	return second; 
-} 
+                //继续向level+1深入查找
+                recur(mat, cur_bound, cur_weight, level + 1, cur_path);
+            }
 
-// function that takes as arguments: 
-// curr_bound -> lower bound of the root node 
-// curr_weight-> stores the weight of the path so far 
-// level-> current level while moving in the search 
-//		 space tree 
-// curr_path[] -> where the solution is being stored which 
-//			 would later be copied to final_path[] 
-void TSPRec(int adj[N][N], int curr_bound, int curr_weight, 
-			int level, int curr_path[]) 
-{ 
-	// base case is when we have reached level N which 
-	// means we have covered all the nodes once 
-	if (level==N) 
-	{ 
-		// check if there is an edge from last vertex in 
-		// path back to the first vertex 
-		if (adj[curr_path[level-1]][curr_path[0]] != 0) 
-		{ 
-			// curr_res has the total weight of the 
-			// solution we got 
-			int curr_res = curr_weight + 
-					adj[curr_path[level-1]][curr_path[0]]; 
+            //如果
+            cur_weight -= mat[cur_path[level - 1]][i];
+            cur_bound = temp;
 
-			// Update final result and final path if 
-			// current result is better. 
-			if (curr_res < final_res) 
-			{ 
-				copyToFinal(curr_path); 
-				final_res = curr_res; 
-			} 
-		} 
-		return; 
-	} 
+            memset(visited, false, sizeof(visited));
+            for (int j = 0; j <= level - 1; ++j)
+            {
+                visited[cur_path[j]] = true;
+            }
+        }
+    }
+}
+void solve(const vector<vector<int>> &mat)
+{
+    //记录路径
+    int cur_path[N + 1];
 
-	// for any other level iterate for all vertices to 
-	// build the search space tree recursively 
-	for (int i=0; i<N; i++) 
-	{ 
-		// Consider next vertex if it is not same (diagonal 
-		// entry in adjacency matrix and not visited 
-		// already) 
-		if (adj[curr_path[level-1]][i] != 0 && 
-			visited[i] == false) 
-		{ 
-			int temp = curr_bound; 
-			curr_weight += adj[curr_path[level-1]][i]; 
+    int cur_bound = 0;
+    memset(cur_path, -1, sizeof(cur_path));
+    memset(visited, 0, sizeof(visited));
 
-			// different computation of curr_bound for 
-			// level 2 from the other levels 
-			if (level==1) 
-			curr_bound -= ((firstMin(adj, curr_path[level-1]) + 
-							firstMin(adj, i))/2); 
-			else
-			curr_bound -= ((secondMin(adj, curr_path[level-1]) + 
-							firstMin(adj, i))/2); 
+    //计算下界
+    for (int i = 0; i < N; ++i)
+    {
+        cur_bound += (firstMin(mat, i) + secondMin(mat, i));
+    }
 
-			// curr_bound + curr_weight is the actual lower bound 
-			// for the node that we have arrived on 
-			// If current lower bound < final_res, we need to explore 
-			// the node further 
-			if (curr_bound + curr_weight < final_res) 
-			{ 
-				curr_path[level] = i; 
-				visited[i] = true; 
+    //取整
+    cur_bound = (cur_bound & 1) ? cur_bound / 2 + 1 : cur_bound / 2;
 
-				// call TSPRec for the next level 
-				TSPRec(adj, curr_bound, curr_weight, level+1, 
-					curr_path); 
-			} 
+    //从顶点1开始。路径此时为0
+    visited[0] = true;
+    cur_path[0] = 0;
 
-			// Else we have to prune the node by resetting 
-			// all changes to curr_weight and curr_bound 
-			curr_weight -= adj[curr_path[level-1]][i]; 
-			curr_bound = temp; 
+    recur(mat, cur_bound, 0, 1, cur_path);
+}
+//接受矩阵。按ctrl+z结束
+void input_vector(vector<vector<int>> &vec)
+{
+    vector<int> v;
+    while (!cin.eof())
+    {
+        int tmp(0);
+        v.clear();
+        string line;
+        getline(cin, line);
+        istringstream ss(line);
+        while (ss >> tmp)
+        {
+            v.push_back(tmp);
+        }
+        vec.push_back(v);
+    }
+}
 
-			// Also reset the visited array 
-			memset(visited, false, sizeof(visited)); 
-			for (int j=0; j<=level-1; j++) 
-				visited[curr_path[j]] = true; 
-		} 
-	} 
-} 
+int main()
+{
+    vector<vector<int>> mat;
+    cout << "请输入以邻接矩阵表示的图，按ctrl+Z表示输入结束" << endl;
+    input_vector(mat);
+    // mat = {
+    //     {-1, 3, 6, 7},
+    //     {12, -1, 2, 8},
+    //     {8, 6, -1, 2},
+    //     {3, 7, 6, -1}};
+    N = mat.size();
 
-// This function sets up final_path[] 
-void TSP(int adj[N][N]) 
-{ 
-	int curr_path[N+1]; 
+    solve(mat);
 
-	// Calculate initial lower bound for the root node 
-	// using the formula 1/2 * (sum of first min + 
-	// second min) for all edges. 
-	// Also initialize the curr_path and visited array 
-	int curr_bound = 0; 
-	memset(curr_path, -1, sizeof(curr_path)); 
-	memset(visited, 0, sizeof(curr_path)); 
-
-	// Compute initial bound 
-	for (int i=0; i<N; i++) 
-		curr_bound += (firstMin(adj, i) + 
-					secondMin(adj, i)); 
-
-	// Rounding off the lower bound to an integer 
-	curr_bound = (curr_bound&1)? curr_bound/2 + 1 : 
-								curr_bound/2; 
-
-	// We start at vertex 1 so the first vertex 
-	// in curr_path[] is 0 
-	visited[0] = true; 
-	curr_path[0] = 0; 
-
-	// Call to TSPRec for curr_weight equal to 
-	// 0 and level 1 
-	TSPRec(adj, curr_bound, 0, 1, curr_path); 
-} 
-
-// Driver code 
-int main() 
-{ 
-	//Adjacency matrix for the given graph 
-	int adj[N][N] = { {0, 10, 15, 20}, 
-		{10, 0, 35, 25}, 
-		{15, 35, 0, 30}, 
-		{20, 25, 30, 0} 
-	}; 
-
-	TSP(adj); 
-
-	printf("Minimum cost : %d\n", final_res); 
-	printf("Path Taken : "); 
-	for (int i=0; i<=N; i++) 
-		printf("%d ", final_path[i]); 
-
-	return 0; 
-} 
+    cout << "最短路径的代价为" << endl;
+    cout << final_res << endl;
+    cout << "路径为:" << endl;
+    for (int i = 0; i < N; ++i)
+        cout << final_path[i] << "->";
+    cout << final_path[N];
+    return 0;
+}

@@ -1,168 +1,116 @@
-// Program to print path from root node to destination node 
-// for N*N -1 puzzle algorithm using Branch and Bound 
-// The solution assumes that instance of puzzle is solvable 
-#include <bits/stdc++.h> 
-using namespace std; 
-#define N 3 
+#include <bits/stdc++.h>
+using namespace std;
+const int N = 3;
+struct Node
+{
+    //父节点
+    Node *parent;
+    //当前的矩阵状态
+    int mat[N][N];
+    //当前的空白块坐标
+    int x, y;
+    //当前错位的数量
+    int cost;
+    //当前的层级
+    int level;
+    Node() = default;
+    //在newX，newY处生成一个新节点
+    Node(Node *p, int m[N][N],
+         const int &_x, const int &_y,
+         const int &l,
+         const int &newX, const int &newY,
+         const int &_c = INT_MAX) : parent(p), level(l), cost(_c), x(newX), y(newY)
+    {
+        memcpy(mat, m, sizeof(mat));
+        swap(mat[_x][_y], mat[newX][newY]);
+    }
 
-// state space tree nodes 
-struct Node 
-{ 
-	// stores the parent node of the current node 
-	// helps in tracing path when the answer is found 
-	Node* parent; 
+    //计算现在到最终结果的差距（不正确的个数）,即计算h(x)
+    void calCost(int final[N][N])
+    {
+        int count = 0;
+        for (int i = 0; i < N; ++i)
+        {
+            for (int j = 0; j < N; ++j)
+            {
+                if (mat[i][j] && (final[i][j] != mat[i][j]))
+                    ++count;
+            }
+        }
+        cost = count;
+    }
+};
 
-	// stores matrix 
-	int mat[N][N]; 
+void printNode(Node *n)
+{
+    for (int i = 0; i < N; ++i)
+    {
+        for (int j = 0; j < N; ++j)
+            cout << n->mat[i][j] << " ";
+        cout << endl;
+    }
+}
 
-	// stores blank tile coordinates 
-	int x, y; 
+void printPath(Node *p)
+{
+    if (!p)
+        return;
+    printPath(p->parent);
+    printNode(p);
+    cout << endl;
+}
+//核心：按照cost+level排序。cost为不正确的数字个数，level为深度。每次选择最小的进行搜索。
+struct cmp
+{
+    bool operator()(const Node *lhs, const Node *rhs) const
+    {
+        return (lhs->cost + lhs->level) > (rhs->cost + rhs->level);
+    }
+};
+int movement[4][2] = {{1, 0},
+                      {0, -1},
+                      {-1, 0},
+                      {0, 1}};
+void solve(int init[N][N], int x, int y, int final[N][N])
+{
+    //优先队列：按照代价排序。小的在前面
+    priority_queue<Node *, vector<Node *>, cmp> pq;
 
-	// stores the number of misplaced tiles 
-	int cost; 
+    //初始根节点
+    Node *root = new Node(nullptr, init, x, y, 0, x, y);
+    //计算价值
+    root->calCost(final);
 
-	// stores the number of moves so far 
-	int level; 
-}; 
+    //入队
+    pq.push(root);
+    int nx = 0, ny = 0;
+    while (!pq.empty())
+    {
+        Node *cur = pq.top();
+        pq.pop();
+        //如果和答案一样了，就打印
+        if (cur->cost == 0)
+        {
+            //递归打印
+            printPath(cur);
+            return;
+        }
 
-// Function to print N x N matrix 
-int printMatrix(int mat[N][N]) 
-{ 
-	for (int i = 0; i < N; i++) 
-	{ 
-		for (int j = 0; j < N; j++) 
-			printf("%d ", mat[i][j]); 
-		printf("\n"); 
-	} 
-} 
+        //从四个方向搜索
+        for (int i = 0; i < 4; ++i)
+        {
+            nx = movement[i][0] + cur->x;
+            ny = movement[i][1] + cur->y;
+            if (nx >= 0 && nx < N && ny >= 0 && ny < N)
+            {
+                Node *child = new Node(cur, cur->mat, cur->x, cur->y, cur->level + 1, nx, ny);
+                child->calCost(final);
+                pq.push(child);
+            }
+        }
+    }
+}
 
-// Function to allocate a new node 
-Node* newNode(int mat[N][N], int x, int y, int newX, 
-			int newY, int level, Node* parent) 
-{ 
-	Node* node = new Node; 
-
-	// set pointer for path to root 
-	node->parent = parent; 
-
-	// copy data from parent node to current node 
-	memcpy(node->mat, mat, sizeof(node->mat)); 
-
-	// move tile by 1 position 
-	swap(node->mat[x][y], node->mat[newX][newY]); 
-
-	// set number of misplaced tiles 
-	node->cost = INT_MAX; 
-
-	// set number of moves so far 
-	node->level = level; 
-
-	// update new blank tile cordinates 
-	node->x = newX; 
-	node->y = newY; 
-
-	return node; 
-} 
-
-// bottom, left, top, right 
-int row[] = { 1, 0, -1, 0 }; 
-int col[] = { 0, -1, 0, 1 }; 
-
-// Function to calculate the number of misplaced tiles 
-// ie. number of non-blank tiles not in their goal position 
-int calculateCost(int initial[N][N], int final[N][N]) 
-{ 
-	int count = 0; 
-	for (int i = 0; i < N; i++) 
-	for (int j = 0; j < N; j++) 
-		if (initial[i][j] && initial[i][j] != final[i][j]) 
-		count++; 
-	return count; 
-} 
-
-// Function to check if (x, y) is a valid matrix cordinate 
-int isSafe(int x, int y) 
-{ 
-	return (x >= 0 && x < N && y >= 0 && y < N); 
-} 
-
-// print path from root node to destination node 
-void printPath(Node* root) 
-{ 
-	if (root == NULL) 
-		return; 
-	printPath(root->parent); 
-	printMatrix(root->mat); 
-
-	printf("\n"); 
-} 
-
-// Comparison object to be used to order the heap 
-struct comp 
-{ 
-	bool operator()(const Node* lhs, const Node* rhs) const
-	{ 
-		return (lhs->cost + lhs->level) > (rhs->cost + rhs->level); 
-	} 
-}; 
-
-// Function to solve N*N - 1 puzzle algorithm using 
-// Branch and Bound. x and y are blank tile coordinates 
-// in initial state 
-void solve(int initial[N][N], int x, int y, 
-		int final[N][N]) 
-{ 
-	// Create a priority queue to store live nodes of 
-	// search tree; 
-	priority_queue<Node*, std::vector<Node*>, comp> pq; 
-
-	// create a root node and calculate its cost 
-	Node* root = newNode(initial, x, y, x, y, 0, NULL); 
-	root->cost = calculateCost(initial, final); 
-
-	// Add root to list of live nodes; 
-	pq.push(root); 
-
-	// Finds a live node with least cost, 
-	// add its childrens to list of live nodes and 
-	// finally deletes it from the list. 
-	while (!pq.empty()) 
-	{ 
-		// Find a live node with least estimated cost 
-		Node* min = pq.top(); 
-
-		// The found node is deleted from the list of 
-		// live nodes 
-		pq.pop(); 
-
-		// if min is an answer node 
-		if (min->cost == 0) 
-		{ 
-			// print the path from root to destination; 
-			printPath(min); 
-			return; 
-		} 
-
-		// do for each child of min 
-		// max 4 children for a node 
-		for (int i = 0; i < 4; i++) 
-		{ 
-			if (isSafe(min->x + row[i], min->y + col[i])) 
-			{ 
-				// create a child node and calculate 
-				// its cost 
-				Node* child = newNode(min->mat, min->x, 
-							min->y, min->x + row[i], 
-							min->y + col[i], 
-							min->level + 1, min); 
-				child->cost = calculateCost(child->mat, final); 
-
-				// Add child to list of live nodes 
-				pq.push(child); 
-			} 
-		} 
-	} 
-} 
 int main()
 {
     int init[N][N] = {{2, 8, 3},
@@ -175,33 +123,3 @@ int main()
     solve(init, 2, 1, final);
     return 0;
 }
-
-// // Driver code 
-// int main() 
-// { 
-// 	// Initial configuration 
-// 	// Value 0 is used for empty space 
-// 	int initial[N][N] = 
-// 	{ 
-// 		{1, 2, 3}, 
-// 		{5, 6, 0}, 
-// 		{7, 8, 4} 
-// 	}; 
-
-// 	// Solvable Final configuration 
-// 	// Value 0 is used for empty space 
-// 	int final[N][N] = 
-// 	{ 
-// 		{1, 2, 3}, 
-// 		{5, 8, 6}, 
-// 		{0, 7, 4} 
-// 	}; 
-
-// 	// Blank tile coordinates in initial 
-// 	// configuration 
-// 	int x = 1, y = 2; 
-
-// 	solve(initial, x, y, final); 
-
-// 	return 0; 
-// } 
