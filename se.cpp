@@ -23,7 +23,7 @@ string getName_bin(int id)
     while (lo < hi)
     {
         size_t mi = (lo + hi) >> 1;
-        (id < students[mi].id) ? hi = mi : lo = mi - 1;
+        (id < students[mi].id) ? hi = mi : lo = mi + 1;
     }
     string name;
     id == --lo ? name = students[id].name : name = "No"; //循环结束时，lo为大于e的元素的最小秩，故lo-1为不大于e的元素的最大秩
