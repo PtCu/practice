@@ -98,6 +98,11 @@ public:
     template <typename VST>
     void traverse(VST &); //遍历（使用函数对象，可全局性修改
 };
+//函数对象
+template<typename T>
+struct Increase{
+    virtual void operator()(T &e) { e++; }
+};
 
 template <typename T>
 //复制数组区间A[lo,hi)]

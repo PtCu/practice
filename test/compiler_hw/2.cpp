@@ -80,10 +80,7 @@ namespace gen_LR
 
 using namespace std;
 //读入终结符和非终结符列表
-void getV()
-{
-    
-}
+
 void getV_T()
 {
     string s;
@@ -110,7 +107,7 @@ void genProduction()
     string s, s_right;
     vector<string> tmp_result;
     gen_LR::P_right p_right;
-    ifstream f("test1.txt");
+    ifstream f("test/compiler_hw/test1.txt");
     stringstream ss;
 
     while (getline(f, s))
