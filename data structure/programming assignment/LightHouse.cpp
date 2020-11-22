@@ -4,7 +4,7 @@ int n;
 int axis_x[MAX];
 int axis_y[MAX];
 typedef long long ll;
-void quickSort(int lo, int hi)  //[lo,hi]
+void quickSort(int lo, int hi) //[lo,hi]
 {
     if (lo < hi)
     {
@@ -27,10 +27,9 @@ void quickSort(int lo, int hi)  //[lo,hi]
                 axis_x[j] = axis_x[i];
                 std::swap(axis_y[j], axis_y[i]);
             }
-            axis_x[i] = pivot;
-            axis_y[i] = y;
         }
-
+        axis_x[i] = pivot;
+        axis_y[i] = y;
         quickSort(lo, i - 1);
         quickSort(i + 1, hi);
     }
@@ -54,7 +53,7 @@ ll invBetween(int lo, int mi, int hi) //归并[lo,hi)
         else
         {
             A[i++] = B[j++];
-            seq_num += lc - k ; //记录顺序对数量（后半部分大于B[j]的元素都和C[k]形成顺序对）
+            seq_num += lc - k; //记录顺序对数量（后半部分大于B[j]的元素都和C[k]形成顺序对）
         }
     }
     delete[] B;
@@ -62,7 +61,7 @@ ll invBetween(int lo, int mi, int hi) //归并[lo,hi)
 }
 ll invInside(int lo, int hi) //左闭右开[lo,hi)
 {
-    if (hi - lo <2)
+    if (hi - lo < 2)
         return 0;
     else
     {

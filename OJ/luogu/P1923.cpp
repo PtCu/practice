@@ -1,29 +1,59 @@
 #include <bits/stdc++.h>
 using namespace std;
-int a[5000005];
-//  int read()//这是一个读入数字的快读
-// {
-//     int x=0,f=1;
-//     char ch=getchar();
-//     while(ch<'0'||ch>'9'){
-//         if(ch=='-')
-//             f=-1;
-//         ch=getchar();
-//     }
-//     while(ch>='0'&&ch<='9'){
-//         x=(x<<1)+(x<<3)+(ch^48);
-//         ch=getchar();
-//     }
-//     return x*f;
-// }
-// int main()
-// {
-//     int n, k;
-//     scanf("%d%d", &n, &k);
-//     for (int i = 0; i < n; i++)
-//     {
-//         a[i] = read();
-//     }
-//     nth_element(a, a + k, a + n);
-//     printf("%d", a[k]);
-// }
+const int maxn = 5e7 + 3;
+vector<int> source(maxn);
+int ans, k;
+
+//[lo,hi]
+void partition(size_t lo, size_t hi)
+{
+    size_t i = lo, j = hi;
+    int pivot = source[i];
+    while (i < j)
+    {
+        while ((i < j) && pivot < source[j])
+        {
+            j--;
+        }
+        if (i < j)
+        {
+            source[i] = source[j];
+        }
+        while ((i < j) && pivot > source[i])
+        {
+            i++;
+        }
+        if (i < j)
+        {
+            source[j] = source[i];
+        }
+    }
+    source[i] = pivot;
+    if (i == k)
+    {
+        ans = source[i];
+        return;
+    }
+    else if (i > k)
+    {
+        partition(lo, i - 1);
+    }
+    else
+    {
+        partition(i + 1, hi);
+    }
+}
+
+int main()
+{
+    cin.tie(0);
+    ios::sync_with_stdio(0);
+    int n;
+    cin >> n >> k;
+    for (size_t i = 0; i < n; ++i)
+    {
+        cin >> source[i];
+    }
+    partition(0, n - 1);
+    cout << ans;
+}

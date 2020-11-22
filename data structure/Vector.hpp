@@ -442,8 +442,8 @@ void Vector<T>::merge(Rank lo, Rank mi, Rank hi)
     T *A = _elem + lo; // A[0,hi-lo)=_elem[lo,hi)
     int lb = mi - lo;
     T *B = new T[lb]; //B[0,lb)=_elem[lo,mi)
-    for (Rank i = 0; i < lb; B[i] = A[i++])
-        ;
+    for (Rank i = 0; i < lb; i++)
+        B[i] = A[i];
     int lc = hi - mi;
     T *C = _elem + mi;
     for (int i = 0, k = 0, j = 0; j < lb;)
