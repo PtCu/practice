@@ -54,7 +54,7 @@ ll invBetween(int lo, int mi, int hi) //归并[lo,hi)
         else
         {
             A[i++] = B[j++];
-            seq_num += lc - k ; //记录顺序对数量（即后半部分大于B[j]的元素的数量）
+            seq_num += lc - k ; //记录顺序对数量（后半部分大于B[j]的元素都和C[k]形成顺序对）
         }
     }
     delete[] B;
