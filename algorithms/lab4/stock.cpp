@@ -32,7 +32,7 @@ int profitBetween(size_t lo, size_t hi, size_t &ml, size_t &mr)
     }
     int ans = max_r - min_l;
 
-    //左侧和右侧的买入卖出天数
+    //左侧和右侧的买入卖出下标
     size_t l_ml, l_mr, r_ml, r_mr;
 
     int pl = profitBetween(lo, mi, l_ml, l_mr);
@@ -41,28 +41,33 @@ int profitBetween(size_t lo, size_t hi, size_t &ml, size_t &mr)
     //求左侧、右侧以及中间的最大值并更改索引
     if (pl > ans)
     {
+        //右侧最大
         if (pr > pl)
         {
             ans = pr;
-            ml = r_ml;
-            mr = r_mr;
+            ml = r_ml; //买入下标为右侧的买入下标
+            mr = r_mr;//卖出下标为右侧的卖出下标
         }
+        //左侧最大
         else
         {
-            ans = pl;
+            ans = pl;   //同理，替换索引
             ml = l_ml;
             mr = l_mr;
         }
     }
     else
     {
+        //右侧最大
         if (pr > ans)
         {
-            ans = pr;
+            ans = pr; //同理，替换索引
             ml = r_ml;
             mr = r_mr;
         }
+        //否则左侧买入，右侧卖出最大
     }
+    
     return ans;
 }
 

@@ -3,7 +3,7 @@ using namespace std;
 const int maxn = 5e5+10;
 int source[maxn];
 typedef long long  ll;
-//[lo,hi)
+//[lo,hi)内归并
 ll merge(size_t lo, size_t mi, size_t hi)
 {
     //逆序对数目
@@ -46,9 +46,9 @@ ll mergeSort(size_t lo, size_t hi)
     else
     {
         size_t mi = (lo + hi) >> 1;
-        ll invLo = mergeSort(lo, mi);  //T(n/2)
-        ll invHi = mergeSort(mi, hi);  //T(n/2)
-        ll invBtw = merge(lo, mi, hi); //O(n)
+        ll invLo = mergeSort(lo, mi);  //T(n/2) 左区间
+        ll invHi = mergeSort(mi, hi);  //T(n/2) 右区间
+        ll invBtw = merge(lo, mi, hi); //O(n) 归并
         return invBtw + invHi + invLo;
     }
 }
