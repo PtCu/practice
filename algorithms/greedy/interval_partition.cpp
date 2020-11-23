@@ -20,7 +20,7 @@ int main()
 
     sort(lectures.begin(), lectures.end(), [](const Lecture &a, const Lecture &b) { return a.start_time < b.start_time; }); //按开始时间小的排序
 
-    priority_queue<double, vector<double>, greater<double>> classrooms; //递减。大顶堆。每个教室最晚结束时间
+    priority_queue<double, vector<double>, greater<double>> classrooms; //小顶堆。每个教室最晚结束时间
 
     classrooms.push(0);
 
