@@ -18,7 +18,7 @@ struct edge
 
 const int N = 100006;
 vector<edge> g[N];
-int D[N]; //距离
+int D[N]; //s到各点的距离
 int n, m; //n个点 m条边
 
 void Dijkstra(int s)
@@ -26,17 +26,18 @@ void Dijkstra(int s)
     priority_queue<P, vector<P>, greater<P>> que; //小端优先队列 greater说明是由小到大排列的
     fill(D, D + MAX, INF);                        //注意必须初始化为最大
     D[s] = 0;
-    que.push(P(0, s));  //P(0,s)第一位表示最小距离，第二位表示最小距离对应的点
+    que.push(P(0, s)); //P(0,s)第一位表示最小距离，第二位表示最小距离对应的点
     while (!que.empty())
     {
         P p = que.top();
         que.pop();
-        int v = p.second; //v是已知阵营的点，作为当前节点；
-        if (D[v] < p.first)
+        int v = p.second;   //v是已知阵营的点，作为当前节点；
+        if (D[v] < p.first) //p.first为以前记录的v点到s点的最小距离
         {
             cout << '?' << endl;
             continue;
         } //s到v的距离本身就比待测点的小，不用比较，说明该点无需重复  D[v]记录s到v的距离
+        
         for (int i = 0; i < g[v].size(); i++)
         {
             //遍历所有后续边,算出距离最小的边并放入队列。队列自动从小到大排序，将最小的放在最前
