@@ -7,6 +7,8 @@ typedef pair<int, int> P;
 // 使用pair记录当前搜索的点，pair<int,int>对：
 // 　　　　first记录最小距离，用以在优先队列中实现类似'最小堆优化'；
 // 　　　　second记录该最小距离对应的点；
+//结点信息是算法运算过程中变化的
+
 struct edge
 {
     int to;
@@ -15,6 +17,7 @@ struct edge
     {
     }
 };
+//边的信息是建好图之后就固定的
 
 const int N = 100006;
 vector<edge> g[N];
@@ -37,7 +40,7 @@ void Dijkstra(int s)
             cout << '?' << endl;
             continue;
         } //s到v的距离本身就比待测点的小，不用比较，说明该点无需重复  D[v]记录s到v的距离
-        
+
         for (int i = 0; i < g[v].size(); i++)
         {
             //遍历所有后续边,算出距离最小的边并放入队列。队列自动从小到大排序，将最小的放在最前
