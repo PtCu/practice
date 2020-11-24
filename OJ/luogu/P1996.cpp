@@ -12,6 +12,7 @@ int main()
     }
     int out = 0;
     int cur = 0;
+    //模拟环：报完数的就去队尾
     while (!Q.empty())
     {
         if (++cur == m)
