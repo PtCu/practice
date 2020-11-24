@@ -32,3 +32,7 @@
 // void swap(vector&):交换两个同类型向量的数据
 // void assign(int n,const T& x):设置向量中第n个元素的值为x
 // void assign(const_iterator first,const_iterator last):向量中[first,last)中元素设置成当前向量元素
+
+
+//vector模拟队列删除第一个元素时，只能erase(begin)
+//queue stack等没有迭代器
