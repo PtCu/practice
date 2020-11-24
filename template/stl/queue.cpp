@@ -24,6 +24,7 @@ int main()
         for (size_t j = 0; j < k; ++j)
         {
             cin >> x;
+            //在读入时就记录国籍数
             if (!n_num.count(x))
             {
                 ++ans;
@@ -35,6 +36,7 @@ int main()
             }
             Q.push({t, x});
         }
+        //去除时间之外的
         while (t - Q.front().time >= 86400)
         {
             --n_num[Q.front().nation];
