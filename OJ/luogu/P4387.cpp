@@ -1,50 +1,41 @@
 #include <bits/stdc++.h>
 using namespace std;
-bool isValid(stack<int> &A, stack<int> &B)
+bool isValid(vector<int> &A, vector<int> &B)
 {
-    stack<int> S,temp;
-    while (!S.empty())
+    stack<int> S;
+    size_t cnt = 0;
+    for (size_t i = 0; i < A.size(); ++i)
     {
-        temp.push(S.top());
-        S.pop();
+        S.push(A[i]);
+        while (!S.empty()&&S.top() == B[cnt])
+        {
+            ++cnt;
+            S.pop();
+        }
     }
-    while (!A.empty())
-    {
-        S.push(A.top());
-        A.pop();
-        if (temp.top() == S.top()) {
-			temp.pop();
-			S.pop();
-			while (!S.empty()) {
-				if (temp.top() == S.top()) {
-					temp.pop();
-					S.pop();
-				}
-				else return false;
-			}
-		}
-    }
-    return S.empty();
-    
-
+    if (S.empty() && cnt == B.size() )
+        return true;
+    else
+        return false;
 }
 int main()
 {
-    int n, q,x;
-    stack<int> A, B;
+    int n, q, x;
     cin >> q;
     while (q--)
     {
+        vector<int> A, B;
         cin >> n;
-        for (size_t i = 0; i < n;++i){
-            cin>>x;
-            A.push(x);
-        }
-        for (size_t i = 0; i < n;++i){
+        for (size_t i = 0; i < n; ++i)
+        {
             cin >> x;
-            B.push(x);
+            A.push_back(x);
+        }
+        for (size_t i = 0; i < n; ++i)
+        {
+            cin >> x;
+            B.push_back(x);
         }
         isValid(A, B) ? cout << "Yes" << endl : cout << "No" << endl;
-
     }
 }

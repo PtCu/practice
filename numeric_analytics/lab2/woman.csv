@@ -23,21 +23,4 @@
 女,	1.65,	60
 女,	1.68,	53
 
-得
-$$
-\left [ \begin{matrix} 
-a & b
-\\
-c & d
-\end{matrix} \right ]
-\left [ \begin{matrix}
-k
-\\
-c_2
-\end{matrix} \right ]=
-\left [ \begin{matrix}
-y_1
-\\
-y_2
-\end{matrix} \right ]
-$$
+
