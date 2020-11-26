@@ -1,37 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
-int main(int argc, char const *argv[])
+int main()
 {
     int n;
     cin >> n;
-    queue< pair<int, int> > q;
-    for (int i = 1; i <= (1 << n); i++)
+    int x;
+    queue<pair<int, int> > Q;
+    for (size_t i = 1; i <= (1 << n); ++i)
     {
-        int x;
         cin >> x;
-        q.push(make_pair(i, x));
+        Q.push(make_pair(i, x));
     }
-    //queue的pop()并不返回任何值
-    while (q.size() > 2)
+    pair<int, int> first_p, second_p;
+    while (Q.size() > 2)
     {
-        pair<int, int> a, b;
-        a = q.front();
-        q.pop();
-        b = q.front();
-        q.pop();
-        if (a.second > b.second)
-            q.push(a);
+        first_p = Q.front();
+        Q.pop();
+        second_p = Q.front();
+        Q.pop();
+        if (second_p.second > first_p.second)
+            Q.push(second_p);
         else
-            q.push(b);
+            Q.push(first_p);
     }
-    pair<int, int> a, b;
-    a = q.front();
-    q.pop();
-    b = q.front();
-    if (a.second > b.second)
-        cout << b.first;
-    else
-        cout << a.first;
 
-    return 0;
+    first_p = Q.front();
+    Q.pop();
+    second_p = Q.front();
+    Q.pop();
+    if (first_p.second > second_p.second)
+    {
+        cout << second_p.first<<endl;
+    }
+    else
+    {
+        cout << first_p.first<<endl;
+    }
 }
