@@ -6,7 +6,7 @@ struct Node
     int l, r; //左右孩子指针
     int w;    //值
     int flag; //懒惰标记
-} tree[maxn << 2];
+} tree[maxn << 2]; //一般开节点数量的4倍空间
 //https://bestsort.cn/2019/04/28/482/
 
 //区间为[l,r]的结点，存储索引为k
