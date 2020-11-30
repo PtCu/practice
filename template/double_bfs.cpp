@@ -6,38 +6,51 @@
 #define P pair<int, int>
 using namespace std;
 //记录下当前状态, 从前往后搜索值为1，从后往前搜索值为2，如果某状态下，当前节点和准备扩展节点的状态相加为3，说明相遇
-queue <P> q1, q2; 
+queue<P> q1, q2;
 int r, c, ans, dis[45][45], vst[45][45];
 int dx[4] = {-1, 0, 1, 0};
 int dy[4] = {0, 1, 0, -1};
 char m[45][45];
 
-void dbfs() {
+void dbfs()
+{
 	bool flag;
 	q1.push(P(1, 1)), dis[1][1] = 1, vst[1][1] = 1; //从前搜
 	q2.push(P(r, c)), dis[r][c] = 1, vst[r][c] = 2; //从后搜
-	while(!q1.empty() && !q2.empty()) {
+	while (!q1.empty() && !q2.empty())
+	{
 		int x0, y0;
-		if(q1.size() > q2.size()) { //每次扩展搜索树小的队列 flag=1扩展前搜的队列，flag=0扩展后搜的队列
+		if (q1.size() > q2.size())
+		{ //每次扩展搜索树小的队列 flag=1扩展前搜的队列，flag=0扩展后搜的队列
 			x0 = q2.front().first, y0 = q2.front().second;
 			q2.pop();
 			flag = 0;
-		}else {
+		}
+		else
+		{
 			x0 = q1.front().first, y0 = q1.front().second;
 			q1.pop();
 			flag = 1;
 		}
-		for(int i = 0; i < 4; i++) {
+		for (int i = 0; i < 4; i++)
+		{
 			int nx = x0 + dx[i];
 			int ny = y0 + dy[i];
-			if(nx >= 1 && nx <= r && ny >= 1 && ny <= c && m[nx][ny] == '.') {
-				if(!dis[nx][ny]) {
+			if (nx >= 1 && nx <= r && ny >= 1 && ny <= c && m[nx][ny] == '.')
+			{
+				if (!dis[nx][ny])
+				{
 					dis[nx][ny] = dis[x0][y0] + 1;
 					vst[nx][ny] = vst[x0][y0];
-					if(flag) q1.push(P(nx, ny));
-					else q2.push(P(nx, ny));
-				}else {
-					if(vst[x0][y0] + vst[nx][ny]== 3) { //相遇
+					if (flag)
+						q1.push(P(nx, ny));
+					else
+						q2.push(P(nx, ny));
+				}
+				else
+				{
+					if (vst[x0][y0] + vst[nx][ny] == 3)
+					{ //相遇
 						ans = dis[nx][ny] + dis[x0][y0];
 						return;
 					}
@@ -47,16 +60,16 @@ void dbfs() {
 	}
 }
 
-int main() {
+int main()
+{
 	cin >> r >> c;
-	for(int i = 1; i <= r; i++)
-		for(int j = 1; j <= c; j++)
+	for (int i = 1; i <= r; i++)
+		for (int j = 1; j <= c; j++)
 			cin >> m[i][j];
-	dbfs(); 
+	dbfs();
 	cout << ans << "\n";
 	return 0;
 }
-
 
 // void TBFS()
 // {
@@ -79,7 +92,7 @@ int main() {
 //        {
 //               if(!Q1.empty())
 //                      BFS_expand(Q1,true);  // 在正向队列中搜索
-//               if(found)  // 搜索结束 
+//               if(found)  // 搜索结束
 //                      return ;
 //               if(!Q2.empty())
 //                      BFS_expand(Q2,false);  // 在反向队列中搜索
@@ -88,7 +101,7 @@ int main() {
 //        }
 // }
 // void BFS_expand(queue<Status> &Q,bool flag)
-// {  
+// {
 //        s=Q.front();  // 从队列中得到头结点s
 //       Q.pop()
 //       for( 每个s 的子节点 t )
@@ -121,5 +134,5 @@ int main() {
 //                              visited[t.state]=2;  // 标记为在反向队列中
 //                              Q.push(t);  // 入队
 //                        ｝
-//              ｝             
-// }                     
+//              ｝
+// }
