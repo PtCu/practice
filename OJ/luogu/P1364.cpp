@@ -97,6 +97,7 @@ int main()
     }
     dfs(1, 0);
     visited[minNode] = true;
+    cout << minNode << endl;
     dfs2(0, minNode);
     cout << ans;
 }

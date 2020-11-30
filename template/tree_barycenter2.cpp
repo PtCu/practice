@@ -1,75 +1,50 @@
-#include <bits/stdc++.h>
-inline void read(int &x)
+#include <iostream>
+#include <cstring>
+using namespace std;
+int map[100][100];
+int sum[100], weight[100];
+int visit[100];
+int n;
+void dfs(int node)
 {
-    x = 0;char ch = getchar();char c = ch;
-    while(ch > '9' || ch < '0')c = ch, ch = getchar();
-    while(ch <= '9' && ch >= '0')x = x * 10 + ch - '0', ch = getchar();
-    if(c == '-')x = -x;
-}
-
-const int INF = 0x3f3f3f3f;
-const int MAXN = 500 + 10;
-
-struct Edge
-{
-    int u,v,next;
-}edge[MAXN + 1];
-int head[MAXN],cnt,root,b[MAXN],n,sum,w[MAXN],ans;
-
-void insert(int a, int b){edge[++cnt] = Edge{a,b,head[a]};head[a] = cnt;}
-
-int dfs1(int u)
-{
-    register int tmp = w[u];
-    for(register int pos = head[u];pos;pos = edge[pos].next)
+    visit[node] = 1;
+    sum[node] = 1;
+    int v, maxw = 0;
+    for (v = 1; v <= n; v++)
     {
-        int v = edge[pos].v;
-        if(!b[v])
-        {
-            b[v] = true;
-            tmp += dfs1(v);
-            if(tmp * 2 >= sum && !root)
-                root = u;
-            if(root)
-                return 0;
-        }
+        if (!map[node][v] || visit[v])
+            continue;
+        dfs(v);
+        sum[node] += sum[v];
+        if (sum[v] > maxw)
+            maxw = sum[v];
     }
-    return tmp;
+    if (n - sum[node] > maxw)
+        maxw = n - sum[node];
+    weight[node] = maxw;
 }
-
-void dfs2(int u, int step)
-{
-    ans += w[u] * step;
-    for(register int pos = head[u];pos;pos = edge[pos].next)
-    {
-        int v = edge[pos].v;
-        if(!b[v])
-        {
-            b[v] = 1;
-            dfs2(v, step + 1);
-        }
-    }
-}
-
 int main()
 {
-    read(n);
-    register int tmp1,tmp2,tmp3;
-    for(register int i = 1;i <= n;++ i)
+    memset(map, 0, sizeof(map));
+    memset(sum, 0, sizeof(sum));
+    memset(weight, 0, sizeof(weight));
+    memset(visit, 0, sizeof(visit));
+    cin >> n;
+    int i, x, y;
+    for (i = 1; i < n; i++)
     {
-        read(tmp1);read(tmp2);read(tmp3);
-        if(tmp2)
-            insert(i,tmp2),insert(tmp2,i);
-        if(tmp3)
-            insert(i,tmp3),insert(tmp3,i);
-        w[i] = tmp1;
-        sum += tmp1;
+        cin >> x >> y;
+        map[x][y] = 1;
+        map[y][x] = 1;
     }
-    b[1] = 1;
-    dfs1(1);
-    memset(b, 0, sizeof(b));
-    b[root] = 1;
-    dfs2(root, 0);
-    printf("%d", ans);
+    dfs(1);
+    int ans = n, ansN = 0;
+    for (i = 1; i <= n; i++)
+        if (weight[i] < ans)
+        {
+            ans = weight[i];
+            ansN = i;
+        }
+    cout << ansN << " " << ans << endl;
     return 0;
 }
