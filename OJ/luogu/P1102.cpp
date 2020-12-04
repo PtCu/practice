@@ -14,11 +14,11 @@ int main()
     for (int i = 1; i <= n; i++)
     {
         cin >> a[i];
-        m[a[i]]++;
-        a[i] -= c;
+        m[a[i]]++;  //B 源数据 记录a[i]有几个
+        a[i] -= c;  //A-C  
     }
     for (int i = 1; i <= n; i++)
-        ans += m[a[i]];
+        ans += m[a[i]]; //给定一个A-C，查有多少个B
     cout << ans << endl;
     return 0;
 }
