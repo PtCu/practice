@@ -1,6 +1,6 @@
 /*
-iterator lower_bound( const T & val);	查找一个最大的位置 it，使得 [begin(), it) 中所有的元素者比 val 小
-iterator upper_bound( const T & val);	查找一个最小的位置 it，使得 [it, end()) 中所有的元素都比 val 大
+iterator lower_bound( const T & val);	查找一个最大的位置 it，使得 [begin(), it) 中所有的元素者比 val 小.it为第一个不小于val的迭代器
+iterator upper_bound( const T & val);	查找一个最小的位置 it，使得 [it, end()) 中所有的元素都比 val 大. it为第一个大于val的迭代器
 */
 //luoguP5076
 #include <bits/stdc++.h>
