@@ -5,7 +5,8 @@ const int maxn = 10010;
 int f[maxn];
 //并
 void Union(int x, int y)
-{ f[find(x)]=find(y);
+{
+    f[find(x)] = find(y);
 }
 //查
 int find(int k)
@@ -26,7 +27,7 @@ int main()
         cin >> z >> x >> y;
         if (z == 1)
         {
-           f[find(x)]=find(y);
+            f[find(x)] = find(y);
         }
         else
         {
