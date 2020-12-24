@@ -1,49 +1,48 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int MAX = 5e3 + 10;
+const int maxn = 5e3 + 10;
+vector<int> G[maxn];
+int chains[maxn];   //chains[i]表示第i个节点的食物链数
+int indegree[maxn]; //顶点i的入度
 const int P = 80112002;
-vector<int> G[MAX];
-int dp[MAX];
-int inDegree[MAX];
-queue<int> q;
-
 int main()
 {
-    ios::sync_with_stdio(0); //取消cin,cout的缓存
-    cin.tie(0);
-    cout.tie(0); //解绑
     int n, m;
-    int ans = 0;
     cin >> n >> m;
-    for (int i = 0; i < m; i++)
+    int a, b;
+    for (size_t i = 0; i < m; i++)
     {
-        int u, v;
-        cin >> u >> v;
-        G[u].push_back(v);
-        inDegree[v]++;
+        cin >> a >> b; //a->b, a eats b
+        G[a].push_back(b);
+        ++indegree[b];
     }
-    for (int i = 1; i <= n; i++)
+
+    queue<int> Q;
+    for (size_t i = 1; i <= n; ++i)
     {
-        if (inDegree[i] == 0)
+        if (!indegree[i])
         {
-            q.push(i);
-            dp[i] = 1;
+            Q.push(i);
+            chains[i] = 1;
         }
     }
-    while (!q.empty())
+    int ans = 0;
+
+    while (!Q.empty())
     {
-        int p = q.front();
-        q.pop();
-        if (G[p].size() == 0)
-            ans = (ans += dp[p]) % P;
-        for (int i = 0; i < G[p].size(); i++)
+        int p = Q.front();
+        Q.pop();
+        //出度为0
+        if (!G[p].size())
         {
-            dp[G[p][i]] = (dp[G[p][i]] + dp[p]) % P;
-            inDegree[G[p][i]]--;
-            if (inDegree[G[p][i]] == 0)
-            {
-                q.push(G[p][i]);
-            }
+            ans = (ans + chains[p]) % P;
+        }
+        for (size_t i = 0; i < G[p].size(); ++i)
+        {
+            if (--indegree[G[p][i]] == 0)
+                Q.push(G[p][i]);
+
+            chains[G[p][i]] = (chains[G[p][i]] + chains[p]) % P;
         }
     }
     cout << ans;
