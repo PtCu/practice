@@ -43,9 +43,9 @@ int contour[100][100], cache[100][100];
 int dx[4] = {0, 0, 1, -1};
 int dy[4] = {1, -1, 0, 0};
 int r, c, ans;
+//记忆化搜索
 int dfs(int x, int y)
 {
-
     if (cache[x][y])
         return cache[x][y];
         //刚开始为第一步
