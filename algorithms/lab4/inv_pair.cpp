@@ -21,9 +21,9 @@ ll merge(size_t lo, size_t mi, size_t hi)
 
     //将B和C归并，归并的时候统计逆序对。同时将结果放入A中
     //i为A的下标，k为C的下标，j为B的下标
-    for (size_t i = 0, k = 0, j = 0; j < lb;)
+    for (size_t i = 0, j = 0, k = 0; j < lb;)
     {
-        //出现逆序就统计下来。同时将小的放在前面取
+        //出现逆序就统计下来。同时将小的放在前面去
         if ((k < lc) && C[k] < B[j])
         {
             A[i++] = C[k++];
