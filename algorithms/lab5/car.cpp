@@ -79,7 +79,6 @@ void solve()
 }
 int main()
 {
-
     cin >> n >> k >> a >> b >> c;
     for (size_t i = 1; i <= n; ++i)
     {

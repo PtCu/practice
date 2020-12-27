@@ -1,8 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-
 const int maxn = 30;
-
 struct Request
 {
     int b, e, v; //开始，结束，价值
@@ -11,7 +9,7 @@ struct Request
 };
 
 vector<Request> requests;
-vector<int> opt;
+vector<int> opt; //opt(n)表示从n个活动1,2,3...n
 vector<pair<bool, int>> S; //记录选择的清况
 int n;         //活动总数
 vector<int> p; //p[i]表示活动i之前的所有活动里面离i最近并且相容的活动

@@ -457,7 +457,7 @@ void Vector<T>::merge(Rank lo, Rank mi, Rank hi)
 }
 
 template <typename T>
-void Vector<T>::mergeSort(Rank lo, Rank hi) //左闭右开
+void Vector<T>::mergeSort(Rank lo, Rank hi) //左闭右开 [lo,hi)
 {
     if (hi - lo < 2) //hi-lo=1 递归基
         return;
