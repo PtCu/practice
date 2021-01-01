@@ -238,7 +238,7 @@ bool Graph<Tv, Te>::TSort(int v, int &clock, Stack<Tv> *S)
       }
    }
    status(v) = VISITED;
-   S->push(vertex(v));
+   S->push(vertex(v)); //最后一个入栈。遍历完后逆序输出
    return true;
 }
 
