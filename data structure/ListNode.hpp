@@ -1,3 +1,4 @@
+#pragma once
 #define ListNodePosi(T) ListNode<T> * //列表节点位置
 typedef int Rank;
 template <typename T>

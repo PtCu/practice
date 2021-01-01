@@ -1,3 +1,4 @@
+#pragma once
 #include "primeNLT.h"
 #include "Dictionary/Dictionary.h" //引入词典ADT
 #include "Bitmap/Bitmap.h"         //引入位图
@@ -62,7 +63,7 @@ Hashtable<K, V>::~Hashtable()
     release(lazyRemoval);   //释放懒惰删除标记
 } //release()负责释放复杂结构，与算法无直接关系，具体实现详见代码包
 
- //读取key. 返回对应的value的指针
+//读取key. 返回对应的value的指针
 template <typename K, typename V>
 V *Hashtable<K, V>::get(K k) //散列表词条查找算法
 {
@@ -74,12 +75,14 @@ V *Hashtable<K, V>::get(K k) //散列表词条查找算法
  * 沿关键码k对应的查找链，找到与之匹配的桶（供查找和删除词条时调用）
  * 试探策略多种多样，可灵活选取；这里仅以线性试探策略为例
  ******************************************************************************************/
-template <typename K, typename V> int Hashtable<K, V>::probe4Hit ( const K& k ) {
-   int r = hashCode ( k ) % M; //从起始桶（按除余法确定）出发
-   //*DSA*/printf(" ->%d", r);
-   while ( ( ht[r] && ( k != ht[r]->key ) ) || ( !ht[r] && lazilyRemoved ( r ) ) )
-      r = ( r + 1 ) % M; //沿查找链线性试探：跳过所有冲突的桶，以及带懒惰删除标记的桶
-   //*DSA*/printf(" ->%d", r);
-   //*DSA*/printf("\n");
-   return r; //调用者根据ht[r]是否为空，即可判断查找是否成功
+template <typename K, typename V>
+int Hashtable<K, V>::probe4Hit(const K &k)
+{
+    int r = hashCode(k) % M; //从起始桶（按除余法确定）出发
+    //*DSA*/printf(" ->%d", r);
+    while ((ht[r] && (k != ht[r]->key)) || (!ht[r] && lazilyRemoved(r)))
+        r = (r + 1) % M; //沿查找链线性试探：跳过所有冲突的桶，以及带懒惰删除标记的桶
+    //*DSA*/printf(" ->%d", r);
+    //*DSA*/printf("\n");
+    return r; //调用者根据ht[r]是否为空，即可判断查找是否成功
 }

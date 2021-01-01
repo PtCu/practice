@@ -1,3 +1,4 @@
+#pragma once
 #include "ListNode.hpp"
 #include <stdlib.h>
 template <typename T>
