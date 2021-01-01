@@ -69,4 +69,34 @@ Rank PQ_ComplHeap<T>::percolateUp(Rank i)
     _elem[i] = tmp;
 }
 
+template <typename T>
+T PQ_ComplHeap<T>::delMax()
+{
+    T maxElem = _elem[0];
+    _elem[0] = _elem[size--];
+    percolateDown(_size, 0);
+    return maxElem;
+}
 
+template <typename T>
+Rank PQ_ComplHeap<T>::percolateDown(Rank n, Rank i)
+{
+    //3logn版本
+    Rank j;
+    //每一步都需要两次比较。多叉堆中要比较更多
+    while (i != (j = ProperParent(_elem, n, i))) //j为父节点和两个子节点中最大的一个。只要i非j，则
+    {
+        swap(_elem[i], _elem[j]); //换位，并继续考察
+        i = j;
+    }
+    return i; //返回下滤抵达的位置
+}
+
+template <typename T>
+Rank PQ_ComplHeap<T>::heapify(Rank n)
+{
+    for (int i = n / 2 - 1; i >= 0; i--)
+    {
+        percolateDown(n, i);
+    }
+}

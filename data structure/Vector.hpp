@@ -99,8 +99,9 @@ public:
     void traverse(VST &); //遍历（使用函数对象，可全局性修改
 };
 //函数对象
-template<typename T>
-struct Increase{
+template <typename T>
+struct Increase
+{
     virtual void operator()(T &e) { e++; }
 };
 
@@ -138,8 +139,10 @@ Rank Vector<T>::max(Rank lo, Rank hi)
 {
     Rank max = lo;
     T max_tmp = _elem[lo];
-    for (int i = lo; i < hi;i++){
-        if(_elem[i]>max_tmp){
+    for (int i = lo; i < hi; i++)
+    {
+        if (_elem[i] > max_tmp)
+        {
             max = i;
             max_tmp = _elem[i];
         }
@@ -465,4 +468,14 @@ void Vector<T>::mergeSort(Rank lo, Rank hi) //左闭右开 [lo,hi)
     mergeSort(lo, mi); //T(n/2)
     mergeSort(mi, hi); //T(n/2)
     merge(lo, mi, hi); //O(n)
+}
+template <typename T>
+void Vector<T>::heapSort(Rank lo, Rank hi) //左闭右开 [lo,hi)
+{
+    Rank n = hi - lo;
+    PQ_ComplHeap<T> H(_elem + lo, n); //待排序区间建堆，O(n)
+    while (0 < --n)                   //反复地摘除最大元并归入已排序的后缀，直至堆空
+    {
+        _elem[--hi] = H.delMax(); //堆顶与末元素对换，再下滤
+    }
 }
