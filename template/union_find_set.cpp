@@ -12,9 +12,7 @@ void Union(int x, int y)
 int find(int k)
 {
     //路径压缩
-    if (f[k] == k)
-        return k;
-    return f[k] = find(f[k]); //让沿途结点都指向祖先，以压缩路径
+    return f[k] == k ? k : f[k] = find(f[k]); //让沿途结点都指向祖先，以压缩路径
 }
 int main()
 {

@@ -9,6 +9,10 @@ struct Conflict
 int f[maxn];
 int enemies[maxn];
 
+void Union(int a, int b)
+{
+    f[find(a)] = f[b];
+}
 int find(int x)
 {
     if (x == f[x])
@@ -43,18 +47,21 @@ int main()
         //如果有，就把敌人的敌人与自己划分为一组
         else
         {
-            f[find(enemies[conflicts[i].x])] = find(conflicts[i].y);
+            Union(enemies[conflicts[i].x], conflicts[i].y);
+
         }
 
-        //如果当前x没有敌人
+        //如果当前y没有敌人
         if (!enemies[conflicts[i].y])
         {
-            //把y作为x的敌人
+            //把x作为y的敌人
             enemies[conflicts[i].y] = conflicts[i].x;
         }
+        //如果有，就把敌人的敌人与自己划分为一组
         else
         {
-            f[find(enemies[conflicts[i].y])] = find(conflicts[i].x);
+            Union(enemies[conflicts[i].y], conflicts[i].x);
+           
         }
     }
     cout << 0 << endl;
