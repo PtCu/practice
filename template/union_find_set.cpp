@@ -9,10 +9,19 @@ void Union(int x, int y)
     f[find(x)] = find(y);
 }
 //查
+//并查集思想就是用老大代表这个集合，操作时用find(x)代替x
 int find(int k)
 {
     //路径压缩
     return f[k] == k ? k : f[k] = find(f[k]); //让沿途结点都指向祖先，以压缩路径
+}
+
+//迭代写法
+int find2(int x) //寻找x的祖先
+{
+    while (f[x] != x)
+        x = f[x]; //不断更新寻找祖先
+    return x;
 }
 int main()
 {
