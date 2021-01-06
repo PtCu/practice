@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <cmath>
 using namespace std;
-const int MAXN = 1e7 + 10;
+const int MAXN = 1e2 + 10;
 inline int read()
 {
     char c = getchar();
@@ -37,13 +37,13 @@ void fast_fast_tle(complex *A, int type)
 {
     for (int i = 0; i < limit; i++)
         if (i < r[i])
-            swap(A[i], A[r[i]]); //求出要迭代的序列
-    for (int mid = 1; mid < limit; mid <<= 1) //mid对应于递归树的深度，相当于小区间长度的一半
+            swap(A[i], A[r[i]]);                         //求出要迭代的序列
+    for (int mid = 1; mid < limit; mid <<= 1)            //mid对应于递归树的深度，相当于小区间长度的一半
     {                                                    //待合并区间的长度的一半
         complex Wn(cos(Pi / mid), type * sin(Pi / mid)); //单位根
         for (int R = mid << 1, j = 0; j < limit; j += R) //对每一个小区间
-        {                    //R是区间的长度，j表示前已经到哪个位置了
-            complex w(1, 0); //幂
+        {                                                //R是区间的长度，j表示前已经到哪个位置了
+            complex w(1, 0);                             //幂
             for (int k = 0; k < mid; k++, w = w * Wn)
             {                                                 //枚举左半部分
                 complex x = A[j + k], y = w * A[j + mid + k]; //蝴蝶效应，x为前半部分，y为后半部分
