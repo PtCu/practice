@@ -74,11 +74,13 @@ int main()
     memset(c, 0, sizeof(c)); //c数组要清零，因为前面有赋值
     for (ll i = 0; i <= n + m + 1; i++)
         c[i] = a[i].real / limit + 0.5; //模仿FFT输出时赋值
+
+
     for (ll i = 0; i <= n + m; i++)
     { //进位
         c[i + 1] += c[i] / 10;
         c[i] %= 10;
-    }
+        }
     limit = n + m + 1;
     while (c[limit])
     { //还有前面没有处理的
