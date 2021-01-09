@@ -45,7 +45,7 @@ int *buildNext(char *P)
     int t = N[0] = -1; //模式串指针
     while (j < m - 1)
     {
-        (0 > t || P[j] == P[t]) ? N[++j] = ++t : t = N[t]; //匹配、失配
+        (0 > t || P[j] == P[t]) ? N[++j] = ++t : t = N[t]; //匹配：next[j+1]=next[j]+1、失配：找next[[next[j]]]
     }
     return N;
 }
