@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+//luog1955
 const int maxn = 1e6;
 int f[maxn];
 int discrete[maxn];
