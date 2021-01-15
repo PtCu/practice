@@ -6,9 +6,9 @@ int discrete[maxn];
 //离散化
 // 总得来说离散化有三步走战略：
 
-// 1.去重（可以用到unique去重函数）
+// 1.排序
 
-// 2.排序
+// 2.去重（可以用到unique去重函数）
 
 // 3.二分索引（可以用到lower_bound函数）
 struct node
@@ -42,8 +42,9 @@ int main()
             discrete[++tot] = source[i].x;
             discrete[++tot] = source[i].y;
         }
+        //先排序
         sort(discrete, discrete + tot);
-        int reu = unique(discrete, discrete + tot) - discrete; //去重 返回的是去重序列后最后一个元素
+        int reu = unique(discrete, discrete + tot) - discrete; //有序数组去重 减去原数组首指针是去重序列后最后一个元素
         //对所有源数据，范围为n
         for (int i = 1; i <= n; ++i)
         {
