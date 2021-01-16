@@ -49,6 +49,7 @@ int main()
         for (int i = 1; i <= n; ++i)
         {
             //lower_bound返回第1个不小于x的位置
+            //不考虑数据的真实大小，只保留秩
             source[i].x = lower_bound(discrete, discrete + reu, source[i].x) - discrete; //通过lower_bound找相对位置
             source[i].y = lower_bound(discrete, discrete + reu, source[i].y) - discrete;
         }
