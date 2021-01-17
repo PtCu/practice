@@ -26,7 +26,7 @@ int n, m; //n个点 m条边
 
 void Dijkstra(int s)
 {
-    priority_queue<P, vector<P>, greater<P>> que; //小端优先队列 greater说明是由小到大排列的
+    priority_queue<P, vector<P>, greater<P>> que; //小端优先队列 greater说明是小顶堆
     fill(D, D + MAX, INF);                        //注意必须初始化为最大
     D[s] = 0;
     que.push(P(0, s)); //P(0,s)第一位表示最小距离，第二位表示最小距离对应的点
