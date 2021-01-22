@@ -1,3 +1,5 @@
+//luogu1983.cpp
+//层级结构可以建图
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn = 1e3 + 5;
