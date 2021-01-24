@@ -1,4 +1,3 @@
-//luogu 2789
 #include <bits/stdc++.h>
 using namespace std;
 bool dp[30][900];
@@ -16,6 +15,8 @@ int main()
         for (int j = i - 1; j >= 1; --j)
         {
             //j为平行线个数
+            //j*(i-j)表示剩下的线和j条平行线的交点
+            //k表示剩下的直线可能的交点个数
             //不平行的线的交点个数最多为 n*(n-1)/2
             for (int k = 0; k <= (i - j) * (i - j - 1) / 2; ++k)
             {
