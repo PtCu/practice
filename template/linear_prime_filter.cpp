@@ -17,7 +17,7 @@ void GetPrime(int n)//筛到n
 	{
 		if(isPrime[i])//没筛掉 
 			Prime[++cnt] = i; //i成为下一个素数
-			
+		//Prime[j]表示第j个素数。枚举已知的前cnt个素数
 		for(int j = 1; j <= cnt && i*Prime[j] <= n/*不超上限*/; j++) 
 		{
         	//从Prime[1]，即最小质数2开始，逐个枚举已知的质数，并期望Prime[j]是(i*Prime[j])的最小质因数
