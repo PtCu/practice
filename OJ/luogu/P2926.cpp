@@ -13,7 +13,7 @@ int main()
     }
     for (int i = 1; i <= maxn; i++)
         for (int j = i; j <= maxn; j += i)
-            w[j] += c[i]; //i这个数会对j产生c[i]的贡献
+            w[j] += c[i]; //i这个数会对j产生c[i]的贡献。j是i的倍数
     for (int i = 1; i <= n; i++)
         printf("%d\n", w[a[i]] - 1); //输出时要把a[i]对自己的贡献减去
     return 0;
