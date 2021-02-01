@@ -1,29 +1,30 @@
-#include<cstdio>
-#include<iostream>
+#include <bits/stdc++.h>
 using namespace std;
-int cf[2000][2000]; //差分：当前数组元素和先前数组元素之差
+const int maxn = 1e3+10;
+int a[maxn][maxn];
 int main()
 {
-    int n,m;
-    int x1,y1,x2,y2;
-    scanf("%d%d",&n,&m);
-    while(m--)//循环的另一种方式（m==0时，会自动跳出，所以循环m遍）
+    int n, m;
+    cin >> n >> m;
+    int x1, x2, y1, y2;
+    while (m--)
     {
-        scanf("%d%d%d%d",&x1,&y1,&x2,&y2);
-        for(int i=x1;i<=x2;i++)//每一行进行差分，时间复杂度O(N) 
+        cin >> x1 >> y1 >> x2 >> y2;
+        for (int i = x1; i <= x2; ++i)
         {
-            cf[i][y1]++;
-            cf[i][y2+1]--;//差分
+            a[i][y1]++;
+            a[i][y2 + 1]--;
         }
     }
-    for(int i=1;i<=n;i++)
+
+    for (int i = 1; i <= n; ++i)
     {
-        for(int j=1;j<=n;j++)   //按列复原
+        for (int j = 1; j <= n; ++j)
         {
-            cf[i][j]+=cf[i][j-1];//复原，利用A[I]-A[I-1]=B[I]，可以推得B[I]+A[I-1]=A[I]（因为B[I-1]已被复原为A[I-1]，所以得到此递推公式）
-            printf("%d ",cf[i][j]);//复原后输出
+            a[i][j] += a[i][j - 1];
+            //w[i][j] = sum;
+            cout << a[i][j] << " ";
         }
-        printf("\n");//换行
+        cout << endl;
     }
-    return 0;
 }

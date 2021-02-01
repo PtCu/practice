@@ -1,22 +1,21 @@
 #include <bits/stdc++.h>
 using namespace std;
-int a[200000];
+const int maxn = 2e5 + 10;
+int a[maxn];
 int main()
 {
-    ios::sync_with_stdio(0); //取消cin,cout的缓存
-    cin.tie(0);
-    cout.tie(0); //解绑
     int n;
     cin >> n;
-    for (int i = 0; i < n; i++)
+    int ans = 0;
+    cin >> a[1];
+    int sum = ans = a[1];
+    for (int i = 2; i <= n; ++i)
     {
         cin >> a[i];
+        sum < 0 ? sum = 0 : 1;
+        sum += a[i];
+        ans = max(ans, sum);
     }
-    int sum=0,ans=-10000;
-    for(int i=0;i<n;i++){
-       sum+=a[i];
-       ans=max(ans,sum);
-       if(sum<0) sum=0;
-    }
-    cout<<ans;
+
+    cout << ans;
 }
