@@ -1,3 +1,4 @@
+//P3406
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn = 1e5 + 10;
@@ -19,11 +20,9 @@ int main()
         cnt[max(last, cur)]--;
         last = cur;
     }
-    long long sum = 0;
     for (int i = 1; i < n; ++i)
     {
-        sum += cnt[i];
-        vis[i] = sum;
+        vis[i] += cnt[i];
     }
     long long ans = 0;
     for (int i = 1; i < n; ++i)
