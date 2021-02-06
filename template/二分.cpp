@@ -1,7 +1,7 @@
 //P1419
 #include <bits/stdc++.h>
 using namespace std;
-deque<int> Q; //单调队列。存放的是下标
+deque<int> Q; //单调队列。单调递增，存放的是与当前元素距离相差s到t的元素的下标
 const int maxn = 1e5+10;
 double a[maxn], sum[maxn];
 double L, R;
