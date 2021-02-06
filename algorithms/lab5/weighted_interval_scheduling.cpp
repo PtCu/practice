@@ -9,7 +9,7 @@ struct Request
 };
 
 vector<Request> requests;
-vector<int> opt; //opt(n)表示从n个活动1,2,3...n
+vector<int> opt; //opt(n)表示从n个活动1,2,3...n选择的最优结果
 vector<pair<bool, int>> S; //记录选择的清况
 int n;         //活动总数
 vector<int> p; //p[i]表示活动i之前的所有活动里面离i最近并且相容的活动

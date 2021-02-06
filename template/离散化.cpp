@@ -44,7 +44,7 @@ int main()
             discrete[++tot] = source[i].y;
         }
         sort(discrete, discrete + tot);
-        int reu = unique(discrete, discrete + tot) - discrete; //去重 返回的是去重序列后最后一个元素
+        int reu = unique(discrete, discrete + tot) - discrete; //去重 返回的是去重序列后最后一个元素 unique对有序序列操作
         //对所有源数据，范围为n
         for (int i = 1; i <= n; ++i)
         {
