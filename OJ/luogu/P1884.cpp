@@ -1,58 +1,96 @@
 #include <bits/stdc++.h>
-#define MAX (2000 + 7)
 using namespace std;
-
-struct Node { int x, y0, y1, c; } a[MAX];
-int cmp(Node a, Node b) { return a.x < b.x; }
-
-unordered_map <int, int> H;
-
-int N, M, qy[MAX];
-long long ans;
-
-struct Segtree
+const int maxn = 2e3 + 10;
+struct node1
 {
-	#define i0 (i << 1)
-	#define i1 (i << 1 | 1)
-	int L[MAX << 2], R[MAX << 2], v[MAX << 2], len[MAX << 2];
-	void init(int i, int l, int r)
-	{
-		L[i] = l, R[i] = r, v[i] = len[i] = 0;
-		if (l != r) {
-			int mid = l + r >> 1;
-			init(i0, l, mid), init(i1, mid+1, r);
-		}
-	}
-	void add(int i, int l, int r, int c)
-	{
-		if (r < L[i] || R[i] < l) return;
-		if (l <= L[i] && R[i] <= r)
-			v[i] += c;
-		else add(i0, l, r, c), add(i1, l, r, c);
-		if (v[i]) len[i] = qy[R[i]+1] - qy[L[i]];//完全覆盖时的长度应该是离散化前的y坐标（实际长度）。
-		else len[i] = len[i0] + len[i1];
-	}
-} Seg;
+	int l, r;
+	int tag;
+	int len;
+} tree[maxn << 2];
 
+struct node2
+{
+	int x, y1, y2;
+	int flag;
+	node2(){};
+	node2(int _x, int _y1, int _y2, int _flag) : x(_x), y1(_y1), y2(_y2), flag(_flag) {}
+} a[maxn]; // 坐标
+
+//存放真实的y坐标的长度
+long long qy[maxn];
+unordered_map<int, int> H;
+
+// 对 [l,r] 区间建立线段树,当前根的编号为 k。这里只是初始化了指针，没有赋值len
+void build(int k, int l, int r)
+{
+	tree[k].l = l, tree[k].r = r, tree[k].len = tree[k].tag = 0;
+	if (l != r)
+	{
+		int mid = l + r >> 1;
+		build(k << 1, l, mid);
+		build(k << 1 | 1, mid + 1, r);
+	}
+}
+//更新k节点
+void pushup(int k)
+{
+	if (tree[k].tag)
+		tree[k].len = qy[tree[k].r + 1] - qy[tree[k].l];
+	else
+		tree[k].len = tree[k << 1].len + tree[k << 1 | 1].len;
+}
+//[y1,y2]内的节点+flag
+void update(int k, int y1, int y2, int flag)
+{
+	if (y2 < tree[k].l || y1 > tree[k].r)
+		return;
+	//在区间内
+	if (y1 <= tree[k].l && tree[k].r <= y2)
+	{
+		tree[k].tag += flag;
+	}
+	else
+	{
+		update(k << 1, y1, y2, flag);
+		update(k << 1 | 1, y1, y2, flag);
+	}
+	pushup(k);
+}
 int main()
 {
-	scanf("%d", &N), H.clear();
-	for (int i = 1, x0, y0, x1, y1; i <= N; i++)
+	int x1, x2, y1, y2, n;
+	H.clear();
+	memset(tree, 0, sizeof(tree));
+	memset(qy, 0, sizeof(qy));
+	memset(a, 0, sizeof(a));
+	long long ans = 0;
+	cin >> n;
+	int cnt = 0;
+	for (int i = 1; i <= n; ++i)
 	{
-		scanf("%d%d%d%d", &x0, &y1, &x1, &y0);//注意是左上和右下
-		a[i] = Node{x0, y0, y1, 1};
-		a[i+N] = Node{x1, y0, y1, -1};
-		qy[++M] = y0, qy[++M] = y1;
+		cin >> x1 >> y2 >> x2 >> y1;
+		a[i] = node2{x1, y1, y2, 1};
+		a[i + n] = node2{x2, y1, y2, -1};
+		qy[++cnt] = y1;
+		qy[++cnt] = y2;
 	}
-	sort(qy+1, qy + M+1), M = unique(qy+1, qy + M+1) - qy - 1;
-	for (int i = 1; i <= M; i++)
-		H[qy[i]] = i;//离散化
-	
-	Seg.init(1, 1, (N <<= 1));
-	sort(a + 1, a + N + 1, cmp);
-	for (int i = 1; i <= N; i++)
+	//需要离散化才能用线段树。保证线段树区间[l,r]不爆炸
+	sort(qy + 1, qy + cnt + 1);
+	cnt = unique(qy + 1, qy + cnt + 1) - qy - 1;
+	for (int i = 1; i <= cnt; ++i)
 	{
-		Seg.add(1, H[a[i].y0], H[a[i].y1] - 1, a[i].c);
-		ans += (long long)Seg.len[1] * (a[i+1].x - a[i].x);
-	} printf("%lld\n", ans);
+		H[qy[i]] = i;
+	}
+	//l为1，r为2n
+	build(1, 1, (n <<= 1));
+	//按x轴排序
+	sort(a + 1, a + 1 + n, [](const node2 &a, const node2 &b) { return a.x < b.x; });
+	for (int i = 1; i <= n; ++i)
+	{
+		//给[y1, y2)内的区间+1
+		update(1, H[a[i].y1], H[a[i].y2] - 1, a[i].flag);
+		//利用线段树，每次对第一个节点查询，即可得到整个区间的长度
+		ans += (long long)tree[1].len * (a[i + 1].x - a[i].x);
+	}
+	printf("%lld", ans);
 }

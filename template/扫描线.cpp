@@ -57,3 +57,4 @@ int main()
 		ans += (long long)Seg.len[1] * (a[i+1].x - a[i].x);
 	} printf("%lld\n", ans);
 }
+

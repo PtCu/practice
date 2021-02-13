@@ -14,7 +14,7 @@ void build(int k, int l, int r)
 {
     tree[k].l = l, tree[k].r = r;
     //对于叶节点（单位长度为1的区间）
-    if (tree[k].l == tree[k].r)
+    if (l==r)
     {
         cin >> tree[k].w;
         return;
