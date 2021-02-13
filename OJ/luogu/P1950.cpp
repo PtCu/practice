@@ -33,7 +33,7 @@ int main()
         stack<int>().swap(s);
         for (int j = m; j >= 1; j--)
         {
-            while (!s.empty() && h[j] <= h[s.top()]) //单调栈，找到j向左最小的数
+            while (!s.empty() && h[j] <= h[s.top()]) //单调栈，找到j向左第一个比h[j]小的数
             {
                 l[s.top()] = j;
                 s.pop();
@@ -59,10 +59,9 @@ int main()
         }
         while (!s.empty())
         {
-            r[s.top()] = m+1;
+            r[s.top()] = m + 1;
             s.pop();
         }
-
 
         for (int j = 1; j <= m; ++j)
         {
