@@ -21,3 +21,18 @@ int Pow(int base, int b) {
     }
     return ans;
 }
+
+long long quickpow(long long base, long long p)
+{
+    long long ans = 1;
+    while (p)
+    {
+        if (p & 1)
+        {
+            ans = (ans * base) % k;
+        }
+        base = (base * base) % k;
+        p >>= 1;
+    }
+    return ans % k;
+}

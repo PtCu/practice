@@ -1,23 +1,21 @@
 #include <bits/stdc++.h>
 using namespace std;
 long long k;
-long long quickpow(long long base, long long p)
+long long Pow(long long base, long long b)
 {
     long long ans = 1;
-    while (p)
+    while (b)
     {
-        if (p & 1)
-        {
+        if (b & 1)
             ans = (ans * base) % k;
-        }
         base = (base * base) % k;
-        p >>= 1;
+        b >>= 1;
     }
-    return ans % k;
+    return ans;
 }
 int main()
 {
     long long b, p;
     cin >> b >> p >> k;
-    cout << b << "^" << p << " mod " << k << "=" << quickpow(b, p);
+    cout << b << "^" << p << " mod " << k << "=" << Pow(b, p);
 }
