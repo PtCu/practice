@@ -3,9 +3,9 @@ using namespace std;
 const int maxn = 10;
 struct Node
 {
-    int l, r; //左右孩子指针
-    int w;    //值
-    int flag; //懒惰标记
+    int l, r;      //左右孩子指针
+    int w;         //值
+    int flag;      //懒惰标记
 } tree[maxn << 2]; //一般开节点数量的4倍空间
 //https://bestsort.cn/2019/04/28/482/
 
@@ -14,7 +14,7 @@ void build(int k, int l, int r)
 {
     tree[k].l = l, tree[k].r = r;
     //对于叶节点（单位长度为1的区间）
-    if (l==r)
+    if (l == r)
     {
         cin >> tree[k].w;
         return;
@@ -37,9 +37,9 @@ void down(int k)
 
 int sum = 0;
 //区间查询，以给sum求和为例
-void askInterval(int k, int x, int y)
+void askInterval(int k, int l, int r)
 {
-    if (tree[k].l >= x && tree[k].r <= y)
+    if (tree[k].l >= l && tree[k].r <= r)
     {
         sum += tree[k].w; //sum为全局变量，每次查询令sum=0
         return;
@@ -47,10 +47,10 @@ void askInterval(int k, int x, int y)
     if (tree[k].flag)
         down(k);
     int mid = (tree[k].l + tree[k].r) / 2;
-    if (x <= mid)
-        askInterval(k * 2, x, y); //递归查询左子树
-    if (y > mid)
-        askInterval(k * 2 + 1, x, y); //递归查询右子树
+    if (l <= mid)
+        askInterval(k * 2, l, r); //递归查询左子树
+    if (r > mid)
+        askInterval(k * 2 + 1, l, r); //递归查询右子树
 }
 //区间修改，以整体加z为例
 void changeInterval(int k, int x, int y, int z)
@@ -75,33 +75,36 @@ void changeInterval(int k, int x, int y, int z)
 
 int ans = 0;
 //单点查询
-void askInterval(int k,int x){
-    if(tree[k].l==x&&tree[k].r==x){
+void askInterval(int k, int x)
+{
+    if (tree[k].l == x && tree[k].r == x)
+    {
         ans = tree[k].w;
         return;
     }
-    if(tree[k].flag)
+    if (tree[k].flag)
         down(k);
     int mid = (tree[k].l + tree[k].r) / 2;
-    if(x<=mid)
+    if (x <= mid)
         askInterval(2 * k, x);
-    if(x>mid)
+    if (x > mid)
         askInterval(k * 2 + 1, x);
-
 }
-//单点修改
-void changeInterval(int k,int x,int z){
-    if(tree[k].l==x&&tree[k].r==x){
-        tree[k].w += z * (tree[k].r - tree[k].l + 1);
+//单点修改. 调用时k=1,x为要修改的节点
+void changeInterval(int k, int x, int z)
+{
+    if (tree[k].l == x && tree[k].r == x)
+    {
+        tree[k].w += z * (tree[k].r - tree[k].l + 1); //w+=z
         tree[k].flag += z;
         return;
     }
-    if(tree[k].flag)
+    if (tree[k].flag)
         down(k);
     int mid = (tree[k].l + tree[k].r) / 2;
-    if(x<=mid)
+    if (x <= mid)
         changeInterval(2 * k, x, z);
-    if(x>mid)
+    if (x > mid)
         changeInterval(2 * k + 1, x, z);
     tree[k].w = tree[2 * k].w + tree[2 * k + 1].w;
 }

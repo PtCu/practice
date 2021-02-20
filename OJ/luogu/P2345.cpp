@@ -1,86 +1,90 @@
-#include <cstdio>
-#include <cstring>
-#include <cmath>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
-const int maxn = 100000 + 10;
-// 取音量较大的奶牛，于是可以先将奶牛的音量排序，然后将奶牛一个一个加入线段树中（线段树是以x值建立的）；
-
-// 本题中可维护两个sum值，sum1为（l，r)中所有奶牛到0点的距离和；sum2位（l，r）中奶牛的个数；
-
-// 然后就查询此前奶牛与当前奶牛的距离差和；
-struct nod
-{
-    long long v, x;
-} s[maxn];
+const int maxn = 1e6 + 10;
 struct node
 {
+    long long v, x;
+} a[maxn];
+// 取音量较大的奶牛，于是可以先将奶牛的音量排序，然后将奶牛一个一个加入线段树中（线段树是以x值建立的）；
+// 本题中可维护两个sum值，sum1为（l，r)中所有奶牛到0点的距离和；sum2位（l，r）中奶牛的个数；
+// 然后就查询此前奶牛与当前奶牛的距离差和；
+struct tree_node
+{
     int left, right;
-    long long sum1, sum2;
-} t[maxn * 4];
-long long n, maxs, ans;
-bool cmp(nod a, nod b)
+    long long dis_sum, num_sum;
+} tree[maxn << 2];
+
+void build(int k, int l, int r)
 {
-    return a.v < b.v;
-}
-void build(int g, int l, int r)
-{
-    t[g].left = l;
-    t[g].right = r;
-    t[g].sum1 = t[g].sum2 = 0;
+    tree[k].left = l, tree[k].right = r;
+    tree[k].dis_sum = tree[k].num_sum = 0;
     if (l == r)
+    {
         return;
+    }
     int mid = (l + r) >> 1;
-    build(g << 1, l, mid);
-    build(g << 1 | 1, mid + 1, r);
+    build(k << 1, l, mid);
+    build(k << 1 | 1, mid + 1, r);
 }
-long long get(int g, int l, int r, int opt)
+//单点修改. 对标号为x的加z
+void changeInterval(int k, int x, int z)
 {
-    if (r < t[g].left || t[g].right < l)
+    if (tree[k].left == tree[k].right)
+    {
+        tree[k].dis_sum += z;
+        tree[k].num_sum++;
+        return;
+    }
+    int mid = (tree[k].left + tree[k].right) / 2;
+    if (x <= mid)
+        changeInterval(2 * k, x, z);
+    if (x > mid)
+        changeInterval(2 * k + 1, x, z);
+    tree[k].dis_sum = tree[2 * k].dis_sum + tree[2 * k + 1].dis_sum;
+    tree[k].num_sum = tree[2 * k].num_sum + tree[2 * k + 1].num_sum;
+}
+
+long long askInterval(int k, int l, int r, int opt)
+{
+    if (r < tree[k].left || tree[k].right < l)
         return 0;
-    if (l <= t[g].left && t[g].right <= r)
+    if (tree[k].left >= l && tree[k].right <= r)
     {
         if (opt == 1)
-            return t[g].sum1;
+        {
+            return tree[k].dis_sum;
+        }
         if (opt == 2)
-            return t[g].sum2;
+        {
+            return tree[k].num_sum;
+        }
     }
-    return get(g << 1, l, r, opt) + get(g << 1 | 1, l, r, opt);
+    return askInterval(k << 1, l, r, opt) + askInterval(k << 1 | 1, l, r, opt);
 }
-void add(int g, int x, long long y)
-{
-    if (t[g].left == t[g].right)
-    {
-        t[g].sum1 += y;
-        t[g].sum2++;
-        return;
-    }
-    if (x <= t[g << 1].right)
-        add(g << 1, x, y);
-    else
-        add(g << 1 | 1, x, y);
-    t[g].sum1 = t[g << 1].sum1 + t[g << 1 | 1].sum1;
-    t[g].sum2 = t[g << 1].sum2 + t[g << 1 | 1].sum2;
-}
+
 int main()
 {
-    scanf("%lld", &n);
-    for (int i = 1; i <= n; i++)
+    int n;
+    cin >> n;
+    long long max_x = 0;
+    for (int i = 1; i <= n; ++i)
     {
-        scanf("%lld%lld", &s[i].v, &s[i].x);
-        maxs = max(maxs, s[i].x);
+        cin >> a[i].v >> a[i].x;
+        max_x = max(max_x, a[i].x);
     }
-    sort(s + 1, s + n + 1, cmp);
-    build(1, 1, maxs);
-    for (int i = 1; i <= n; i++)
+    sort(a + 1, a + 1 + n, [](const node &node1, const node &node2) { return node1.v < node2.v; });
+    build(1, 1, max_x);
+    long long ans = 0;
+    long long dis, num;
+    for (int i = 1; i <= n; ++i)
     {
-        long long g = get(1, s[i].x + 1, maxs, 1); //距离
-        long long k = get(1, s[i].x + 1, maxs, 2); //个数
-        ans += s[i].v * (g - k * s[i].x);
-        g = get(1, 1, s[i].x - 1, 1);
-        k = get(1, 1, s[i].x - 1, 2);
-        ans += s[i].v * (k * s[i].x - g);
-        add(1, s[i].x, s[i].x);
+        dis = askInterval(1, a[i].x + 1, max_x, 1);
+        num = askInterval(1, a[i].x + 1, max_x, 2);
+        ans += a[i].v * (dis - num * a[i].x);
+        dis = askInterval(1, 1, a[i].x, 1);
+        num = askInterval(1, 1, a[i].x, 2);
+        ans += a[i].v * (num * a[i].x - dis);
+        changeInterval(1, a[i].x, a[i].x);
     }
-    printf("%lld\n", ans);
+    cout << ans;
 }
