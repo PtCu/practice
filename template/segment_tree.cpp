@@ -44,31 +44,48 @@ void askInterval(int k, int l, int r)
         sum += tree[k].w; //sum为全局变量，每次查询令sum=0
         return;
     }
-    if (tree[k].flag)
-        down(k);
+    // if (tree[k].flag)
+    //     down(k);
     int mid = (tree[k].l + tree[k].r) / 2;
     if (l <= mid)
-        askInterval(k * 2, l, r); //递归查询左子树
-    if (r > mid)
+        askInterval(k * 2, l, r);     //递归查询左子树
+    if (r > mid)                      //不是else if，两边都要加上
         askInterval(k * 2 + 1, l, r); //递归查询右子树
 }
-//区间修改，以整体加z为例
-void changeInterval(int k, int x, int y, int z)
+
+//求区间的和，带返回值的
+int askInterval_ret(int k, int l, int r)
 {
-    if (tree[k].l >= x && tree[k].r <= y)
+    if (l <= tree[k].l && tree[k].r <= r)
     {
-        tree[k].w += z * (tree[k].l - tree[k].r + 1);
-        tree[k].flag += z;
+        return tree[k].w;
+    }
+    int mid = (tree[k].l + tree[k].r) >> 1;
+    int cnt = 0;
+    if (l <= mid)
+        cnt += askInterval_ret(k << 1, l, r);
+    if (mid < r)
+        cnt += askInterval_ret(k << 1 | 1, l, r);
+    return cnt;
+}
+
+//区间修改，以整体加z为例
+void changeInterval(int k, int l, int r, int x)
+{
+    if (tree[k].l >= l && tree[k].r <= r)
+    {
+        tree[k].w += x * (tree[k].r - tree[k].l + 1);
+        //tree[k].flag += z;
         return;
     }
-    if (tree[k].flag)
-        down(k);
+    // if (tree[k].flag)
+    //     down(k);
     //区间中点
     int mid = (tree[k].l + tree[k].r) / 2;
-    if (x <= mid)
-        changeInterval(k * 2, x, y, z);
-    if (y > mid)
-        changeInterval(k * 2 + 1, x, y, z);
+    if (l <= mid)
+        changeInterval(k * 2, l, r, x);
+    if (r > mid)
+        changeInterval(k * 2 + 1, l, r, x);
     //更新过后回溯
     tree[k].w = tree[k * 2].w + tree[k * 2 + 1].w;
 }
@@ -82,12 +99,12 @@ void askInterval(int k, int x)
         ans = tree[k].w;
         return;
     }
-    if (tree[k].flag)
-        down(k);
+    // if (tree[k].flag)
+    //     down(k);
     int mid = (tree[k].l + tree[k].r) / 2;
     if (x <= mid)
         askInterval(2 * k, x);
-    if (x > mid)
+    else
         askInterval(k * 2 + 1, x);
 }
 //单点修改. 调用时k=1,x为要修改的节点
@@ -96,15 +113,15 @@ void changeInterval(int k, int x, int z)
     if (tree[k].l == x && tree[k].r == x)
     {
         tree[k].w += z * (tree[k].r - tree[k].l + 1); //w+=z
-        tree[k].flag += z;
+        //tree[k].flag += z;
         return;
     }
-    if (tree[k].flag)
-        down(k);
+    // if (tree[k].flag)
+    //     down(k);
     int mid = (tree[k].l + tree[k].r) / 2;
     if (x <= mid)
         changeInterval(2 * k, x, z);
-    if (x > mid)
+    else 
         changeInterval(2 * k + 1, x, z);
     tree[k].w = tree[2 * k].w + tree[2 * k + 1].w;
 }

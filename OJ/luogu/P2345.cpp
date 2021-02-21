@@ -29,7 +29,7 @@ void build(int k, int l, int r)
 //单点修改. 对标号为x的加z
 void changeInterval(int k, int x, int z)
 {
-    if (tree[k].left == tree[k].right)
+    if (tree[k].left ==x&&x== tree[k].right)
     {
         tree[k].dis_sum += z;
         tree[k].num_sum++;
@@ -38,7 +38,7 @@ void changeInterval(int k, int x, int z)
     int mid = (tree[k].left + tree[k].right) / 2;
     if (x <= mid)
         changeInterval(2 * k, x, z);
-    if (x > mid)
+    else
         changeInterval(2 * k + 1, x, z);
     tree[k].dis_sum = tree[2 * k].dis_sum + tree[2 * k + 1].dis_sum;
     tree[k].num_sum = tree[2 * k].num_sum + tree[2 * k + 1].num_sum;
@@ -46,8 +46,6 @@ void changeInterval(int k, int x, int z)
 
 long long askInterval(int k, int l, int r, int opt)
 {
-    if (r < tree[k].left || tree[k].right < l)
-        return 0;
     if (tree[k].left >= l && tree[k].right <= r)
     {
         if (opt == 1)
@@ -59,7 +57,14 @@ long long askInterval(int k, int l, int r, int opt)
             return tree[k].num_sum;
         }
     }
-    return askInterval(k << 1, l, r, opt) + askInterval(k << 1 | 1, l, r, opt);
+    int mid = (tree[k].left + tree[k].right) >> 1;
+    long long cnt = 0;
+    if (l <= mid)
+        cnt += askInterval(k << 1, l, r, opt);
+    if (mid < r)
+        cnt += askInterval(k << 1 | 1, l, r, opt);
+    return cnt;
+   
 }
 
 int main()
