@@ -74,7 +74,7 @@ int main()
     long long ans = 0;
     for (int i = 1; i <= n; ++i)
     {
-        l = lower_bound(dis + 1, dis + 1 + retn, a[i]) - dis;
+        l = lower_bound(dis + 1, dis + retn, a[i]) - dis;
         ans += (long long)query(1, l + 1, retn);
         change(1, l, 1);
     }
