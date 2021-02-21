@@ -1,4 +1,5 @@
-// 由排序不等式知正序和最大，故只需求将a，b序列变成正序的最小步数
+//luogu1966
+// 由排序不等式知正序和最大，故只需求将a,b序列变成正序的最小步数。
 // 首先对a操作或对b操作是没有区别的，因为我们只关系a,b中元素
 // 的对应关系。
 // 所以我们不妨只对b操作。
@@ -18,10 +19,7 @@ struct node
     int idx, v;
 } a[maxn], b[maxn];
 int c[maxn];
-bool cmp(node a, node b)
-{
-    return a.v < b.v;
-}
+
 int ans;
 int invBetween(int lo, int mi, int hi) //归并[lo,hi)
 {
@@ -73,8 +71,8 @@ int main()
     {
         scanf("%d", &b[i].v), b[i].idx = i;
     }
-    sort(a + 1, a + 1 + n, cmp);
-    sort(b + 1, b + 1 + n, cmp);
+    sort(a + 1, a + 1 + n, [](const node &node1, const node &node2) { return node1.v < node2.v; });
+    sort(b + 1, b + 1 + n, [](const node &node1, const node &node2) { return node1.v < node2.v; });
     for (int i = 1; i <= n; ++i)
     {
         c[b[i].idx] = a[i].idx;
