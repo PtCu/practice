@@ -1,3 +1,4 @@
+//1013
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn = 1010;
@@ -32,6 +33,7 @@ int main()
         int count = 0;
         cin >> city;
         visited[city] = true;
+        //对于每个顶点，如果没遍历过就遍历它，同时联通分量加一
         for (int j = 1; j <= n; ++j)
         {
             if (!visited[j])
@@ -41,5 +43,6 @@ int main()
             }
         }
         cout << count - 1 << endl;
-        }
+    }
+    return 0;
 }

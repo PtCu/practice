@@ -1,18 +1,21 @@
-#include <iostream>
-
-int main() {
-    int nx = 200;
-    int ny = 100;
-    std::cout << "P3\n" << nx << " " << ny << "\n255\n";
-    for (int j = ny-1; j >= 0; j--) {
-        for (int i = 0; i < nx; i++) {
-            float r = float(i) / float(nx);
-            float g = float(j) / float(ny);
-            float b = 0.2;
-            int ir = int(255.99*r);
-            int ig = int(255.99*g);
-            int ib = int(255.99*b);
-            std::cout << ir << " " << ig << " " << ib << "\n";
+#include <bits/stdc++.h>
+using namespace std;
+bool isPrime[100000001];
+int Prime[60000];
+int cnt;
+void filter(int n)
+{
+    memset(isPrime, 1, sizeof(isPrime));
+    isPrime[1] = 0;
+    for (int i = 2; i <= n; ++i)
+    {
+        if (isPrime[i])
+            Prime[++cnt] = i;
+        for (int j = 1; j <= cnt && Prime[j] * i <= n; ++j)
+        {
+            isPrime[Prime[j] * i] = 0;
+            if (i % Prime[j]==0)
+                break;
         }
     }
 }

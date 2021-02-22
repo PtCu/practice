@@ -7,16 +7,18 @@ void bfs(int x)
 {
     queue<int> Q;
     Q.push(x);
+    visited[x] = true;
     while (!Q.empty())
     {
         int p = Q.front();
-        visited[p] = true;
+
         Q.pop();
         for (int i = 0; i < G[p].size(); ++i)
         {
             if (!visited[G[p][i]])
             {
                 Q.push(G[p][i]);
+                visited[G[p][i]] = true;
             }
         }
     }
