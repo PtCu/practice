@@ -26,6 +26,7 @@ int n, m; //n个点 m条边
 bool used[N];
 void Dijkstra(int s)
 {
+     memset(used, 0, sizeof(used));
     priority_queue<P, vector<P>, greater<P>> que; //小端优先队列 greater说明是小顶堆
     fill(D, D + MAX, INF);                        //注意必须初始化为最大
     D[s] = 0;

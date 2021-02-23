@@ -60,7 +60,7 @@ void completePacksack()
         for (int j = 1; j <= capacity; j++)
         { //背包容量
             for (int k = 0; k * w[i] <= j; k++)
-                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - k * w[i]] + v[i * k]);
+                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - k * w[i]] + k*v[i]);
         }
     }
     cout << dp[capacity];
