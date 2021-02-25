@@ -58,4 +58,28 @@ struct BigN
         }
         return c;
     }
+        BigN operator+(const BigN &e)
+    {
+        BigN c;
+        int carry = 0;
+        int temp = 0;
+        int i;
+        for (int i = 0; i <= len - 1 || i <= e.len - 1; ++i)
+        {
+            temp = e.a[i] + a[i] + carry;
+            c.a[c.len++] = temp % 10;
+            carry = temp / 10;
+        }
+        if (carry)
+        {
+            c.a[c.len++] = carry;
+        }
+        // while (carry)
+        // {
+        //     c.a[c.len++] = carry % 10;
+        //     carry /= 10;
+        // }
+
+        return c;
+    }
 };
