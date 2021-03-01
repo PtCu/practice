@@ -2,7 +2,7 @@
 using namespace std;
 int main()
 {
-    for (int i = 0; i <= 120; ++i)
+    for (int i = 1; i < 1; ++i)
     {
         cout << i << " ";
     }
