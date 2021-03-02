@@ -27,6 +27,7 @@ int main()
         scanf("%s %d %d", &node[i].name, &node[i].age, &node[i].worth);
     }
     sort(node, node + n, cmp);
+    //预处理，只保留可能输出的
     int cnt = 0;
     for (int i = 0; i < n; ++i)
     {
@@ -34,6 +35,7 @@ int main()
         if (nums[node[i].age] <= 100)
             waitingList[cnt++] = node[i];
     }
+    //输出
     int print = 0;
     int m, ageMin, ageMax;
     for (int i = 1; i <= k; ++i)
