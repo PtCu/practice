@@ -1,53 +1,55 @@
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <stack>
+#define lowbit(i) ((i) & (-i))
+const int maxn = 100010;
 using namespace std;
-multiset<int> se;
-stack<int> st;
-auto mid = se.begin();
-int main()
-{
-    int n;
-    cin >> n;
-    char s[12];
-    int x;
-    for (int i = 0; i < n; ++i)
-    {
-        scanf("%s", s);
-        if (s[1] == 'e')
-        {
-            int n = se.size();
-            int mid;
-            if (se.size() % 2 == 0)
-            {
-                mid = n / 2;
-            }
-            else
-            {
-                mid = (n + 1) / 2;
-            }
-            auto ans = next(se.begin(), mid);
-        }
-        else if (s[1] == 'o')
-        {
-            if (st.empty())
-            {
+int c[maxn];
+stack<int> s;
+void update(int x, int v) {
+    for(int i = x; i < maxn; i += lowbit(i))
+        c[i] += v;
+}
+int getsum(int x) {
+    int sum = 0;
+    for(int i = x; i >= 1; i -= lowbit(i))
+        sum += c[i];
+    return sum;
+}
+void PeekMedian() {
+    int left = 1, right = maxn, mid, k = (s.size() + 1) / 2;
+    while(left < right) {
+        mid = (left + right) / 2;
+        if(getsum(mid) >= k)
+            right = mid;
+        else
+            left = mid + 1;
+    }
+    printf("%d\n", left);
+}
+int main() {
+    int n, temp;
+    scanf("%d", &n);
+    char str[15];
+    for(int i = 0; i < n; i++) {
+        scanf("%s", str);
+        if(str[1] == 'u') {
+            scanf("%d", &temp);
+            s.push(temp);
+            update(temp, 1);
+        } else if(str[1] == 'o') {
+            if(!s.empty()) {
+                update(s.top(), -1);
+                printf("%d\n", s.top());
+                s.pop();
+            } else {
                 printf("Invalid\n");
             }
+        } else {
+            if(!s.empty())
+                PeekMedian();
             else
-            {
-                st.pop();
-                auto er = se.lower_bound(x);
-                if (*er < *mid)
-                    ++mid;
-                se.erase(se.lower_bound(x));
-            }
-        }
-        else if (s[2] == 'u')
-        {
-            scanf("%d", &x);
-            st.push(x);
-            auto in = se.insert(x);
-            if (x < *mid)
-                --mid;
+                printf("Invalid\n");
         }
     }
+    return 0;
 }
