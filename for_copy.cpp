@@ -1,48 +1,55 @@
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <stack>
+#define lowbit(i) ((i) & (-i))
+const int maxn = 100010;
 using namespace std;
-const int maxn = 10;
-struct Node
-{
-    int l, r;      //左右孩子指针
-    int w;         //值
-    int flag;      //懒惰标记
-} tree[maxn << 2]; //一般开节点数量的4倍空间
-void build(int k, int l, int r)
-{
-    tree[k].l = l, tree[k].r = r;
-    if (l == r)
-        return;
-    int mid = (l + r) >> 1;
-    build(k << 1, l, mid);
-    build(k << 1 | 1, mid + 1, r);
+int c[maxn];
+stack<int> s;
+void update(int x, int v) {
+    for(int i = x; i < maxn; i += lowbit(i))
+        c[i] += v;
 }
-int sum;
-void askInterval(int k, int l, int r)
-{
-    if (tree[k].l >= l && tree[k].r <= r)
-    {
-        sum += tree[k].w;
+int getsum(int x) {
+    int sum = 0;
+    for(int i = x; i >= 1; i -= lowbit(i))
+        sum += c[i];
+    return sum;
+}
+void PeekMedian() {
+    int left = 1, right = maxn, mid, k = (s.size() + 1) / 2;
+    while(left < right) {
+        mid = (left + right) / 2;
+        if(getsum(mid) >= k)
+            right = mid;
+        else
+            left = mid + 1;
     }
-    int mid = (tree[k].l + tree[k].r) >> 1;
-    if (mid >= l)
-        askInterval(k << 1, l, mid);
-    if (mid < r)
-        askInterval(k << 1 | 1, mid + 1, r);
+    printf("%d\n", left);
 }
-
-void changeInterval(int k, int l, int r, int x)
-{
-    if (tree[k].l >= l && tree[k].r <= r)
-    {
-        tree[k].w += (tree[k].r - tree[k].l + 1) * x;
+int main() {
+    int n, temp;
+    scanf("%d", &n);
+    char str[15];
+    for(int i = 0; i < n; i++) {
+        scanf("%s", str);
+        if(str[1] == 'u') {
+            scanf("%d", &temp);
+            s.push(temp);
+            update(temp, 1);
+        } else if(str[1] == 'o') {
+            if(!s.empty()) {
+                update(s.top(), -1);
+                printf("%d\n", s.top());
+                s.pop();
+            } else {
+                printf("Invalid\n");
+            }
+        } else {
+            if(!s.empty())
+                PeekMedian();
+            else
+                printf("Invalid\n");
+        }
     }
-    int mid = (tree[k].l + tree[k].r) >> 1;
-    if (mid >= l)
-        changeInterval(k << 1, l, mid, x);
-    if (mid < r)
-        changeInterval(k << 1 | 1, mid + 1, r, x);
-
-    tree[k].w = tree[k << 1].w + tree[k << 1 + 1].w;
+    return 0;
 }
-
-
