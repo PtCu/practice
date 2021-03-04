@@ -58,7 +58,7 @@ struct BigN
         }
         return c;
     }
-        BigN operator+(const BigN &e)
+    BigN operator+(const BigN &e)
     {
         BigN c;
         int carry = 0;
@@ -81,5 +81,10 @@ struct BigN
         // }
 
         return c;
+    }
+
+    BigN operator*(const BigN &e)
+    {
+       
     }
 };
