@@ -1,106 +1,106 @@
 #include<cstdio>
 #include<cstring>
-#include<vector>
 #include<algorithm>
+#include<iostream>
+#include<vector>
+#include<queue>
 using namespace std;
-
-int N, M, K, Ds;
-//边结构体
-struct Edge {
-    int a, b, weight;
-} e;
-vector<Edge> adj[1011];//邻接表数组，存储邻接边
-
-//获取房屋和加油站编号的方法
-int getID() {
-    char id[5];
-    int num = 0;
-    scanf("%s", id);
-    for(int i = 0; i < strlen(id); i++)
+const int N=1050,E=1000,INF=0x3f3f3f3f;
+int n,m,k,C;
+int d[N];
+bool st[N];
+struct D
+{
+    int v,dis;
+    bool operator <(const D& t)const
     {
-        if(id[i] == 'G')    continue;
-        num = num * 10 + id[i] - 48;
+        return dis>t.dis;
     }
-    if(id[0] != 'G')    num += M;//将房屋加油站编号用连续的整数表示，先排加油站，后排房屋
-    return num;
+};
+struct Gas
+{
+    int id;
+    int ming;
+    double everg;
+    bool operator <(const Gas& t)
+    {
+        if(ming!=t.ming)return ming>t.ming;
+        else if(everg!=t.everg) return everg<t.everg;
+        else return id<t.id;
+    }
+}ga[15];
+vector<D>adj[N];
+priority_queue<D>q;
+int get_i(char c[])
+{
+    if(c[0]=='G') return atoi(c+1)+E;
+    else  return atoi(c);
 }
-
-int disto[1011];//disto[i]为起点到顶点i的最短距离
-bool marked[1011];//标记顶点是否被添加为最短路径树顶点
-void dijkstra(int s) {
-    fill(disto, disto + 1011, 0x3fffffff);
-    fill(marked, marked + 1011, false);
-    disto[s] = 0;
-    for(int i = 0; i < N + M; i++)
+void Dijkstra(int s)
+{
+    memset(st,0,sizeof st);
+    memset(d,0x3f,sizeof d);
+    d[s]=0;
+    q.push({s,d[s]});
+    while(!q.empty())
     {
-        int u = -1, minDis = 0x3fffffff;
-        for(int j = 1; j <= N + M; j++)//每次添加的都是离起点距离最小的非树顶点
+        int u=q.top().v;
+        q.pop();
+        if(st[u])continue;
+        st[u]=true;
+        for(int i=0;i<adj[u].size();i++)
         {
-            if(marked[j] == false && disto[j] < minDis)
+            int v=adj[u][i].v,dis=adj[u][i].dis;
+            if(d[v]>d[u]+dis)
             {
-                u = j;
-                minDis = disto[j];
+                d[v]=d[u]+dis;
+                q.push({v,d[v]});
             }
         }
-        if(u == -1)    break;//找不到了，说明没有和起点连通的顶点了
-        marked[u] = true;//添加到最短路径树
-        for(int i = 0; i < adj[u].size(); i++)
-        {
-            Edge adje = adj[u][i];//得到邻接边
-            int next = adje.a;
-            if(next == u)    next = adje.b;//得到邻接顶点
-            if(disto[u] + adje.weight < disto[next])//松弛操作
-                disto[next] = disto[u] + adje.weight;
-        }
     }
+
+    
 }
-
-int main() {
-    scanf("%d %d %d %d", &N, &M, &K, &Ds);
-    for(int i = 0; i < K; i++)
+int main()
+{
+    scanf("%d %d %d %d",&n,&m,&k,&C);
+    while(k--)
     {
-        e.a = getID();
-        e.b = getID();
-        scanf("%d", &e.weight);
-        adj[e.a].push_back(e);
-        adj[e.b].push_back(e);
+        char a[6],b[6];
+        int w;
+        scanf("%s %s %d",a,b,&w);
+        int u=get_i(a),v=get_i(b);
+        adj[u].push_back({v,w});
+        adj[v].push_back({u,w});
     }
-    int ans = -1;//目标加油站的下标
-    double ansMin = 0, ansAvg = 0;//目标加油站到任意房屋的最小距离和平均距离
-    for(int i = 1; i <= M; i++)//从编号最小的加油站开始
+    bool has_way=false;
+    for(int i=1;i<=m;i++)
     {
-        double curMin = 0, curAvg = 0;//当前加油站到任意房屋的最小距离和平均距离
-        dijkstra(i);//对每个加油站执行
-        int sum = 0;
-        int closest = 0x3fffffff;
-        for(int j = M+1; j <= M+N; j++)
-        {//对每个房屋，要跳过加油站
-            if(disto[j] > Ds)//判断是否超出服务半径
-            {
-                curMin = -1;
-                break;
-            }
-            sum += disto[j];
-            closest = min(closest, disto[j]);
-        }
-        if(curMin != -1)
+        Dijkstra(i+E);
+        int cnt=0,tt=0;
+        int ming=INF;
+        for(int i=1;i<=n;i++)
         {
-            curMin = closest;
-            curAvg = 1.0 * sum / N;
-            if(curMin > ansMin)
+            if(d[i]<=C)
             {
-                ansMin = curMin;
-                ansAvg = curAvg;
-                ans = i;
-            }
-            else if(curMin == ansMin && curAvg < ansAvg)
-            {
-                ansAvg = curAvg;
-                ans = i;
+                ming=min(ming,d[i]);
+                tt+=d[i];
+                cnt++;
             }
         }
+        if(cnt==n)
+        {
+            double r=1.0*tt/(1.0*n);
+            has_way=true;
+            ga[i]={i,ming,r};
+        }
     }
-    if(ans == -1)    printf("No Solution");
-    else             printf("G%d\n%.1f %.1f", ans, ansMin, ansAvg);
+    sort(ga+1,ga+m+1);
+    if(!has_way)puts("No Solution");
+    else
+    {
+        cout<<"G"<<ga[1].id<<endl;
+        printf("%.1f %.1f\n",1.0*ga[1].ming,ga[1].everg+1e-8);
+    }
     return 0;
 }

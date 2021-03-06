@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int maxn = 1e3 + 10;
+const int maxn = 1e4 + 10;
 struct Edge
 {
     int to, cost;
@@ -14,9 +14,9 @@ int n, m, k, ds;
 
 void Dijkstra(int s)
 {
-    priority_queue<P, vector<P>, greater<P>> Q;
     fill(D, D + maxn, INT_MAX);
     memset(visited, 0, sizeof(visited));
+    priority_queue<P, vector<P>, greater<P>> Q;
     D[s] = 0;
     Q.push({0, s});
     while (!Q.empty())
@@ -53,6 +53,7 @@ bool getData(float &mean, float &mini)
     mini = (float)tmp_min;
     return true;
 }
+
 int main()
 {
 
@@ -85,10 +86,11 @@ int main()
         G[i_a].push_back({i_b, w});
         G[i_b].push_back({i_a, w});
     }
+
     float ans_mean = 0;
     float ans_min = 0;
     int idx = -1;
-    for (int i = n + 1; i <= n + m; ++i)
+    for (int i = 1 + n; i <= n + m; ++i)
     {
         float tmp_mean = 0, tmp_min = 0;
         Dijkstra(i);
@@ -107,10 +109,9 @@ int main()
             }
         }
     }
-    if (idx != -1)
+    if (idx!=-1)
     {
-        cout << "G" << idx - n << endl;
-        printf("%.1f %.1f", ans_min, ans_mean);
+        printf("G%d\n%.1f %.1f", idx-n, ans_min, ans_mean + 1e-8);
     }
     else
     {
