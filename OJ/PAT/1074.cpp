@@ -23,14 +23,24 @@ int main()
     {
         vec.push_back(nodes[p]);
         ++cnt;
-        if (cnt % k || cnt == n)
+        if (cnt % k == 0)
         {
             reverse(vec.begin() + cnt - k, vec.begin() + cnt);
         }
+        // else if (cnt == n)
+        // {
+        //     reverse(vec.end() - cnt % k, vec.end());
+        // }
         p = nodes[p].next;
     }
-    for (int i = 0; i < vec.size();++i){
-        
+    cout << setw(5) << setfill('0') << vec[0].add << " " << vec[0].data << " ";
+    for (int i = 1; i < vec.size(); ++i)
+    {
+        cout << setw(5) << setfill('0')
+             << vec[i].add << endl
+             << setw(5) << setfill('0')
+             << vec[i].add << " " << vec[i].data << " ";
     }
+    cout << -1;
     return 0;
 }
