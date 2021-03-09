@@ -26,7 +26,7 @@ int n, m; //n个点 m条边
 bool used[N];
 void Dijkstra(int s)
 {
-     memset(used, 0, sizeof(used));
+    memset(used, 0, sizeof(used));
     priority_queue<P, vector<P>, greater<P>> que; //小端优先队列 greater说明是小顶堆
     fill(D, D + MAX, INF);                        //注意必须初始化为最大
     D[s] = 0;
@@ -35,13 +35,8 @@ void Dijkstra(int s)
     {
         P p = que.top();
         que.pop();
-        int v = p.second;   //v是已知阵营的点，作为当前节点；
-        // if (D[v] < p.first) //p.first为以前记录的v点到s点的最小距离
-        // {
-        //     cout << '?' << endl;
-        //     continue;
-        // } //s到v的距离本身就比待测点的小，不用比较，说明该点无需重复  D[v]记录s到v的距离
-        if(used[v])
+        int v = p.second; //v是已知阵营的点，作为当前节点；
+        if (used[v])
             continue;
         used[v] = 1;
         for (int i = 0; i < g[v].size(); i++)

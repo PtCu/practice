@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn = 500;
-vector<int>G[maxn + 5] ;
+vector<int>G[maxn + 5];
 int n, m; //n个点，m条边
 int main()
 {

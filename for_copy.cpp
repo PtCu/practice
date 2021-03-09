@@ -1,54 +1,56 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn = 1e5 + 10;
-int f[maxn], hobby[maxn], num[maxn];
-int Find(int x)
+struct Edge
 {
-    if (x == f[x])
-        return x;
-    return f[x] = Find(f[x]);
-}
-void Union(int a, int b)
+    int to, cost;
+};
+vector<Edge> G[maxn];
+bool inQueue[maxn];
+int D[maxn];
+int n;
+void spfa(int s)
 {
-    int fa = Find(a);
-    int fb = Find(b);
-    if (fa != fb)
+    fill(D, D + maxn, INT_MAX);
+    memset(inQueue, 0, sizeof(inQueue));
+    D[s] = 0;
+    queue<int> Q;
+    Q.push(s);
+    inQueue[s] = 1;
+    while (!Q.empty())
     {
-        f[fb] = fa;
-        num[fa] += num[fb];
-        num[fb] = 0;
+        int cur = Q.front();
+        Q.pop();
+        inQueue[cur] = false;
+        for (int i = 0; i < G[cur].size(); ++i)
+        {
+            Edge e = G[cur][i];
+            int to = e.to;
+            if (D[to] > D[cur] + e.cost)
+            {
+                D[to] = D[cur] + e.cost;
+                if (inQueue[to] == 0)
+                {
+                    inQueue[to] = 1;
+                    Q.push(to);
+                }
+            }
+        }
     }
 }
 int main()
 {
-    int n;
-    cin >> n;
-    for (int i = 1; i <= n; ++i)
-        f[i] = i, num[i] = 1;
-    for (int i = 0; i < n; ++i)
+    int n, m, s;
+    cin >> n >> m >> s;
+    int u, v, w;
+    for (int i = 0; i < m; ++i)
     {
-        int k, x;
-        scanf("%d:", &k);
-        for (int j = 0; j < k; ++j)
-        {
-            cin >> x;
-            if (hobby[x] == 0)
-                hobby[x] = i;
-            Union(hobby[x], i);
-        }
+        cin >> u >> v >> w;
+        G[u].push_back({v, w});
     }
-    int cnt = 0;
-    sort(num + 1, num + 1 + n, greater<int>());
+    spfa(s);
     for (int i = 1; i <= n; ++i)
     {
-        if (num[i] != 0)
-            cnt++;
-    }
-    cout << cnt << endl;
-    for (int i = 1; i <= cnt; ++i)
-    {
-        if (i != 1)
-            cout << " ";
-        cout << num[i];
+        cout << D[i] << " ";
     }
 }
