@@ -1,66 +1,45 @@
 #include <bits/stdc++.h>
-#define MAX 1e9+10
 using namespace std;
 const int maxn = 505;
-const int maxm = 10005;
-
+const long long P = 998244354;
 int n, m; //n个点，m条边
-int dis[maxn][maxn];
-void Floyed()
+long long D[maxn][maxn];
+void Floyd()
 {
-    int temp;
-    for (size_t k = 1; k <= n; ++k)
+    for (int k = 1; k <= n; ++k)
     {
-        for (size_t i = 1; i <= n; ++i)
+        for (int i = 1; i <= n; ++i)
         {
-            if(i!=k)
-            for (size_t j = 1; j <= n; ++j)
+            for (int j = 1; j <= n; ++j)
             {
-                int temp = (dis[i][k] == MAX || dis[k][j] == MAX) ? MAX : (dis[i][k] % 998244354 + dis[k][j] % 998244354) % 998244354;
-                if (i!=j&&k!=j&&dis[i][j] > temp)
-                {
-                    dis[i][j] = temp;
-                }
+                D[i][j] = min(D[i][j], D[i][k] + D[k][j]);
             }
         }
     }
 }
- int main()
+int main()
 {
     cin >> n >> m;
-    // memset是按照字节进行赋值，即对每一个字节赋相同值，可以对数组进行整体赋值。每个字节赋值为127即为最大
-    // memset(dis, 127, sizeof(dis));
-
-    for (size_t i = 1; i <= n; ++i)
+    long long a, b, w;
+    fill(D[0], D[0] + maxn * maxn, INT_MAX);
+    for (int i = 1; i <= n; ++i)
     {
-        for (size_t j = 1; j <= n; ++j)
-        {
-            if (i == j)
-                dis[i][j] = 0;
-            else
-                dis[i][j] = MAX;
-        }
+        D[i][i] = 0;
     }
-
-    int x, y;
-    int l;
-    while (m--)
+    for (int i = 0; i < m; ++i)
     {
-        cin >> x >> y >> l;
-        dis[x][y] = l;
-        dis[y][x] = l;
+        cin >> a >> b >> w;
+        //判重边
+        D[a][b] = D[b][a] = min(D[b][a],w);
     }
-    Floyed();
-    int sum;
-    for (size_t i = 1; i <= n; ++i)
+    Floyd();
+    for (int i = 1; i <= n; ++i)
     {
-        sum = 0;
-        for (size_t j = 1; j <= n; ++j)
+        long long ans = 0;
+        for (int j = 1; j <= n; ++j)
         {
-            if (i == j)
-                continue;
-            sum = (sum + dis[i][j]) % 998244354;
+            ans = (ans + D[i][j]) % P;
         }
-        cout << sum % 998244354 << endl;
+        cout << ans << endl;
     }
 }

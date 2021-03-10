@@ -20,7 +20,7 @@ bool isValid()
         S.insert(cur);
         cur = nodes[i];
     }
-    if(S.size()!=n)
+    if (S.size() != n)
         return false;
     return true;
 }

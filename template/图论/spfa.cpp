@@ -32,6 +32,7 @@ void spfa(int s)
             if (D[e.to] > D[cur] + e.cost)
             {
                 D[e.to] = D[cur] + e.cost;
+                //如果此时不在队列则入队
                 if (!inQueue[e.to])
                 {
                     times[e.to]++;     //松弛成功后不在队中才入队
