@@ -6,6 +6,10 @@ int f[maxn];
 //并
 void Union(int x, int y)
 {
+    int xf = find(x);
+    int yf = find(y);
+    if (xf == yf)
+        return;
     f[find(x)] = find(y);
 }
 //查

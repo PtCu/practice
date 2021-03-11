@@ -1,4 +1,10 @@
 //PAT 1057
+// 举例来说，树状数组所能解决的典型问题就是存在一个长度为n的数组，我们如何高效进行如下操作：
+
+// update(idx, delta)：将num加到位置idx的数字上。
+// prefixSum(idx)：求从数组第一个位置到第idx（含idx）个位置所有数字的和。
+// rangeSum(from_idx, to_idx)：求从数组第from_idx个位置到第to_idx个位置的所有数字的和
+
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn = 1e5 + 10;
@@ -9,6 +15,7 @@ inline int lowbit(int x)
 {
     return (-x) & x;
 }
+//更新位置i的数，同时更新后面的数，因为树状数组本质是分段前缀和
 void update(int i, int x)
 {
     while (i <= maxn)
@@ -17,7 +24,7 @@ void update(int i, int x)
         i += lowbit(i);
     }
 }
-
+//求[1, i]区间内的数之和
 int sum(int i)
 {
     int sum = 0;
