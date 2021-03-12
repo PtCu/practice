@@ -1,26 +1,35 @@
-bool is_complete(tree *root)
+#include <iostream>
+#include <vector>
+#include <map>
+using namespace std;
+map<int, bool> mp;
+int main()
 {
-	queue q;
-	tree *ptr;
-	// 进行广度优先遍历（层次遍历），并把NULL节点也放入队列
-	q.push(root);
-	while ((ptr = q.pop()) != NULL)
+	int m, n, u, v, a;
+	scanf("%d %d", &m, &n);
+	vector<int> pre(n);
+	for (int i = 0; i < n; i++)
 	{
-		q.push(ptr->left);
-		q.push(ptr->right);
+		scanf("%d", &pre[i]);
+		mp[pre[i]] = true;
 	}
-
-	// 判断是否还有未被访问到的节点
-	while (!q.is_empty())
+	for (int i = 0; i < m; i++)
 	{
-		ptr = q.pop();
-		
-		// 有未访问到的的非NULL节点，则树存在空洞，为非完全二叉树
-		if (NULL != ptr)
+		scanf("%d %d", &u, &v);
+		for (int j = 0; j < n; j++)
 		{
-			return false;
+			a = pre[j];
+			if ((a >= u && a <= v) || (a >= v && a <= u))
+				break;
 		}
+		if (mp[u] == false && mp[v] == false)
+			printf("ERROR: %d and %d are not found.\n", u, v);
+		else if (mp[u] == false || mp[v] == false)
+			printf("ERROR: %d is not found.\n", mp[u] == false ? u : v);
+		else if (a == u || a == v)
+			printf("%d is an ancestor of %d.\n", a, a == u ? v : u);
+		else
+			printf("LCA of %d and %d is %d.\n", u, v, a);
 	}
-
-	return true;
+	return 0;
 }

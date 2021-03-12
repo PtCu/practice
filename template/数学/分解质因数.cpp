@@ -11,7 +11,11 @@ int main()
     {
         cin >> s[i];
     }
-     if (m1==1) {cout<<0<<endl;return 0;}
+    if (m1 == 1)
+    {
+        cout << 0 << endl;
+        return 0;
+    }
     //筛质因数
     int max_prime = 0;
     int p = 2;

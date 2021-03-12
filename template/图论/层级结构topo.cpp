@@ -8,7 +8,7 @@ bool cache[maxn];
 vector<int> stop;
 int indgree[maxn];
 int deep[maxn];
-// dep[son]=dep[father]+1dep[son]=dep[father]+1
+// dep[son]=dep[father]+1
 int main()
 {
     ios::sync_with_stdio(0);
