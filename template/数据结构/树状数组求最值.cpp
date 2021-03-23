@@ -1,3 +1,5 @@
+//luogu2880
+//https://www.codenong.com/cs106012941/
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn = 5e2 + 10;
