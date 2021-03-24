@@ -12,7 +12,7 @@ int lowerbit(int x)
     return x & (-x);
 }
 
-//树状数组本质是分段
+//树状数组本质是分段管理
 //c[x]表示的是c[x-lowbit(x)+1,x]的最大值.
 //就是把求区间和树状数组中的累加改为了求最值
 void update(int i, int x)
