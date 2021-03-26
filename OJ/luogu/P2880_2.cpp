@@ -10,7 +10,8 @@ int main()
     cin >> n >> m;
     for (int i = 1; i <= n; ++i)
     {
-        cin >> Min[i][0] >> Max[i][0];
+        cin >> Min[i][0];
+        Max[i][0] = Min[i][0];
     }
     for (int i = 2; i <= n; ++i)
     {
@@ -24,7 +25,7 @@ int main()
             Max[j][i] = max(Max[j][i - 1], Max[j + (1 << (i - 1))][i - 1]);
         }
     }
-    
+
     int l, r;
     for (int i = 0; i < m; ++i)
     {
