@@ -18,23 +18,26 @@ inline int read()
     return x * f;
 }
 const int maxn = 1e5 + 10;
-int Max[maxn][17];
+int Max[maxn][21];
 int Log2[maxn];
 int main()
 {
+    ios::sync_with_stdio(0);
+    cout.tie(0);
     int n, m;
-    cin >> n >> m;
+    n = read();
+    m = read();
     for (int i = 1; i <= n; ++i)
     {
-        cin >> Max[i][0];
+        Max[i][0] = read();
     }
-    for (int i = 1; i <= n; ++i)
+    for (int i = 2; i <= n; ++i)
     {
         Log2[i] = Log2[i / 2] + 1;
     }
-    for (int i = 1; i <= 16; ++i)
+    for (int i = 1; i <= 21; ++i)
     {
-        for (int j = 1; j + (1 << i) - 1 <= n; ++i)
+        for (int j = 1; j + (1 << i) - 1 <= n; ++j)
         {
             Max[j][i] = max(Max[j][i - 1], Max[j + (1 << (i - 1))][i - 1]);
         }
@@ -42,9 +45,10 @@ int main()
     int l, r;
     for (int i = 0; i < m; ++i)
     {
-        cin >> l >> r;
+        l = read();
+        r = read();
         int s = Log2[r - l + 1];
         int ma = max(Max[l][s], Max[r - (1 << s) + 1][s]);
-        cout << ma << endl;
+        printf("%d\n", ma);
     }
 }
