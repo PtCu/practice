@@ -3,6 +3,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn = 5e4 + 10;
+//Max[i][j]表示[i,i+2^j-1]内的最大值
 int Min[maxn][17], Max[maxn][17];
 int Log2[maxn];
 int main()
@@ -21,6 +22,8 @@ int main()
     {
         for (int j = 1; j + (1 << i) - 1 <= n; ++j)
         {
+            //max(前半部分最大，后半部分最大)
+            // [j,j+2^(i-1)-1]和[j+2^(i-1),j+2^i]
             Min[j][i] = min(Min[j][i - 1], Min[j + (1 << (i - 1))][i - 1]);
             Max[j][i] = max(Max[j][i - 1], Max[j + (1 << (i - 1))][i - 1]);
         }

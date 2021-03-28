@@ -16,11 +16,17 @@ inline ll read()
     register ll num = 0;
     register char ch;
     register bool flag = false;
-    while ((ch = getchar()) == ' ' || ch == '\n' || ch == '\r');
-    if (ch == '-')flag = true; else num = ch ^ 48;
-    while ((ch = getchar()) != ' '&&ch != '\n'&&ch != '\r'&&~ch)
+    while ((ch = getchar()) == ' ' || ch == '\n' || ch == '\r')
+        ;
+    if (ch == '-')
+        flag = true;
+    else
+        num = ch ^ 48;
+    while ((ch = getchar()) != ' ' && ch != '\n' && ch != '\r' && ~ch)
         num = num * 10 + (ch ^ 48);
-    if (flag)return -num; return num;
+    if (flag)
+        return -num;
+    return num;
 }
 double minv = INT_MAX;
 // 首先把所有城市的高度和编号存入一个结构体，然后排序，记录一下每个城市排序后的位置。
@@ -28,10 +34,11 @@ double minv = INT_MAX;
 // 不难想到第一近和第二近一定在pos[i]-2 pos[i]-1 pos[i]+1 pos[i]+2之间，在这四个位置之间和上面的暴力是一样的处理，
 // 然后在链表中把pos[i]删去，这样的话由于1到n是从西到东的，链表中除了pos[i]以外的所有城市都在pos[i]东边，
 // 那么就可以O(N)预处理出c1 c2 dist1 dist2
-struct Node {
+struct Node
+{
     ll h;
     int id, last, next;
-}q[N];
+} q[N];
 
 inline bool cmp(register Node s, register Node t) { return s.h < t.h; }
 inline void updata(register int i, register int loc, register int x)
@@ -56,7 +63,8 @@ inline void updata(register int i, register int loc, register int x)
 int main()
 {
     n = read();
-    for (register int i = 1; i <= n; ++i)q[i].h = read(), q[i].id = i;
+    for (register int i = 1; i <= n; ++i)
+        q[i].h = read(), q[i].id = i;
     sort(q + 1, q + n + 1, cmp);
     for (register int i = 1; i <= n; ++i)
     {
@@ -75,17 +83,19 @@ int main()
         updata(i, loc, q[loc].last);
         updata(i, loc, q[loc].next);
         updata(i, loc, q[q[loc].next].next);
-        if (q[loc].last)q[q[loc].last].next = q[loc].next;
-        if (q[loc].next)q[q[loc].next].last = q[loc].last;
+        if (q[loc].last)
+            q[q[loc].last].next = q[loc].next;
+        if (q[loc].next)
+            q[q[loc].next].last = q[loc].last;
         q[loc].last = q[loc].next = 0;
     }
     //初始化2^0的情况
     for (register int i = 1; i <= n; ++i)
     {
         dist4[i][0] = dist2[i];
-        dist5[i][0] = dist1[c2[i]]; //c2[i]是a在i时选择的下一个城市，b在a之后选择城市
+        dist5[i][0] = dist1[c2[i]];            //c2[i]是a在i时选择的下一个城市，b在a之后选择城市
         dist3[i][0] = dist2[i] + dist1[c2[i]]; //总路程
-        c3[i][0] = c1[c2[i]]; //a和b从i开了一个周期后的下一个城市
+        c3[i][0] = c1[c2[i]];                  //a和b从i开了一个周期后的下一个城市
     }
     for (register int j = 1; j <= 20; ++j)
         for (register int i = 1; i <= n; ++i)
@@ -112,11 +122,13 @@ int main()
                 loc = c3[loc][j];
             }
         }
-        if (dist2[loc] <= x0)a += dist2[loc];
-        if (a <= 0)continue;
-        if (!ans || 1.0*a / b - minv < -0.00000001 || (fabs(1.0*a / b - minv) <= 0.00000001&&q[pos[ans]].h < q[pos[i]].h))
+        if (dist2[loc] <= x0)
+            a += dist2[loc];
+        if (a <= 0)
+            continue;
+        if (!ans || 1.0 * a / b - minv < -0.00000001 || (fabs(1.0 * a / b - minv) <= 0.00000001 && q[pos[ans]].h < q[pos[i]].h))
         {
-            minv = 1.0*a / b;
+            minv = 1.0 * a / b;
             ans = i;
         }
     }
@@ -135,7 +147,8 @@ int main()
                 s = c3[s][j];
             }
         }
-        if (dist2[s] <= x)a += dist2[s];
+        if (dist2[s] <= x)
+            a += dist2[s];
         printf("%lld %lld\n", a, b);
     }
     return 0;
