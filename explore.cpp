@@ -1,15 +1,15 @@
-#include <cstdio>
-#include <cstring>
-
-class Foo
+#include <bits/stdc++.h>
+using namespace std;
+struct Node
 {
-protected:
-    int a;
+    int c, d;
 };
-class Bar : public Foo
-{
-    int get() { return a; }
-};
+vector<Node> a = {{1, 1}, {1, 1}, {1, 1}};
 int main()
 {
+    auto begin = a.begin();
+    auto end = a.end();
+    auto mid = partition(begin, end, [](Node p) { return p.c < 1; });
+    int a = mid - begin;
+    return 0;
 }
