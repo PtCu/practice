@@ -1,15 +1,18 @@
 #include <bits/stdc++.h>
 using namespace std;
-struct Node
+void function_(int a, int b, int c)
 {
-    int c, d;
-};
-vector<Node> a = {{1, 1}, {1, 1}, {1, 1}};
+    char buffer1[5];
+    char buffer2[10];
+    char *r;
+    r = buffer1 + 12;
+    (*r) += 8;
+}
+
 int main()
 {
-    auto begin = a.begin();
-    auto end = a.end();
-    auto mid = partition(begin, end, [](Node p) { return p.c < 1; });
-    int a = mid - begin;
-    return 0;
+    int x = 0;
+    function_(1, 2, 3);
+    x = 1;
+    printf("%d\n", x);
 }

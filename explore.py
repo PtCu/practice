@@ -1,1 +1,4 @@
-print(3600*7+55*60)
+from PIL import Image
+img = Image.open('binary.ppm')
+img.save('binary.bmp')
+img.show()
