@@ -55,6 +55,9 @@ int main()
             si = (state >> (i << 1)) & 3;
             nx = nxt[i][si];
             sNxt = (state >> (nx << 1)) & 3;
+
+            //4、修改状态为第i+1个旋钮旋转后的状态
+            //5、修改状态为牵连旋钮旋转后的状态
             nextState = state ^ (si << (i << 1)) ^ (((si + 1) & 3) << (i << 1)) ^ (sNxt << (nx << 1)) ^ (((sNxt + 1) & 3) << (nx << 1));
             if (!g[nextState])
             {

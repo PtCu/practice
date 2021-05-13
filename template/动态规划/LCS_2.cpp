@@ -1,3 +1,4 @@
+//https://www.luogu.com.cn/problem/solution/P1439
 // 关于为什么可以转化成LIS问题，这里提供一个解释。
 // A:3 2 1 4 5
 // B:1 2 3 4 5

@@ -23,28 +23,28 @@ int d[maxn];
 // 第四步插入 12，d=[0,4,12]；
 // 第五步插入 2，d=[0,2,12]。
 // 最终得到最大递增子序列长度为 3。
-vector<int> nums = {10, 9, 2, 5, 3, 7, 101, 18};
+vector<int> nums = {3, 2, 1, 4, 5};
 int LIS()
 {
-	int len = 1, n = nums.size();
-	if (n == 0)
-		return 0;
-	d[len] = nums[0];
-	for (int i = 1; i < n; ++i)
-	{
-		if (nums[i] > d[len])
-		{
-			d[++len] = nums[i];
-		}
-		else
-		{
-			int pos = upper_bound(d + 1, d + len + 1, nums[i]) - d;
-			d[pos] = nums[i];
-		}
-	}
-	return len;
+    int len = 1, n = nums.size();
+    if (n == 0)
+        return 0;
+    d[len] = nums[0];
+    for (int i = 1; i < n; ++i)
+    {
+        if (nums[i] > d[len])
+        {
+            d[++len] = nums[i];
+        }
+        else
+        {
+            int pos = upper_bound(d + 1, d + len + 1, nums[i]) - d;
+            d[pos] = nums[i];
+        }
+    }
+    return len;
 }
 int main()
 {
-	cout << LIS();
+    cout << LIS();
 }
