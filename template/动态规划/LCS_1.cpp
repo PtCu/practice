@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+//朴素解法O(n^2)
 int longestCommonSubsequence(string text1, string text2)
 {
     int m = text1.length(); //行
@@ -15,11 +16,9 @@ int longestCommonSubsequence(string text1, string text2)
     {
         for (int j = 1; j < n + 1; j++)
         {
-            bool isFirst = true;
-            if (text1[i - 1] == text2[j - 1] && isFirst)
+            if (text1[i - 1] == text2[j - 1])
             {
                 dp[i][j] = dp[i - 1][j - 1] + 1;
-                isFirst = false;
             }
             else
             {

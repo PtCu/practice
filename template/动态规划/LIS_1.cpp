@@ -10,7 +10,7 @@
 //（其中，j = 0, 1, 2...i-1），并得到它们的dp[j]，而后，dp[i] = max{dp[j] + 1}（j = 0, 1, 2...i-1，
 //且nums[j]的order排名小于等于nums[i]的order排名，即order[nums[j]] <= order[nums[i]]）。
 // 至此，状态转移方程就出来了：
-// dp[i] = max{dp[j] + 1, 1}，其中j = 0,1,2,...,i-1且order[nums[j]] <= order[nums[i]]。
+// dp[i] = max{dp[j] + 1, dp[i]}，其中j = 0,1,2,...,i-1且order[nums[j]] <= order[nums[i]]。
 // 边界：
 // dp[0] = 1。以nums[0]为末尾时能得到的最长不下降子列长度肯定为1，因为该子列就只有一个元素nums[0]。
 // 之后，从边界出发，通过状态转移方程，不断计算dp[]数组，dp[]数组中的最大值就是最长不下降子列的长度。
