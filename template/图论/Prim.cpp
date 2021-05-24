@@ -1,3 +1,4 @@
+//https://blog.csdn.net/qq_33769475/article/details/98449393
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn = 1e2 + 10;
@@ -12,6 +13,9 @@ struct Edge
 
 int n, m;
 vector<Edge> G[maxn];
+//prim更新的是未标记集合到已标记集合之间的距离
+//Dijkstra更新的是源点到未标记集合之间的距离
+//注意与Dijkstra的区别
 int D[maxn];
 bool visited[maxn];
 int Prim(int s)
@@ -33,14 +37,14 @@ int Prim(int s)
         {
             int to = G[cur.second][i].to;
             int cost = G[cur.second][i].cost;
-            if (D[to] > D[cur.second] + cost)
+            //这里与Dijkstra不同，只比较cost和D[to]
+            if (D[to] > cost)
             {
-                D[to] = D[cur.second] + cost;
+                D[to] = cost;
                 Q.push({D[to], to});
             }
         }
     }
-    //与Dijkstra相比多了个求和
     for (int i = 0; i < n; ++i)
     {
         sum += D[i];
