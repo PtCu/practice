@@ -20,6 +20,7 @@ struct edge
 //边的信息是建好图之后就固定的
 
 const int N = 100006;
+//邻接表，记录了边权
 vector<edge> g[N];
 int D[N]; //s到各点的距离
 int n, m; //n个点 m条边
