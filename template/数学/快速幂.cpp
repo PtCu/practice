@@ -1,6 +1,6 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
-int P=9999;
+int P = 9999;
 //快速幂
 int Pow(long long base, int v)
 {
@@ -10,18 +10,19 @@ int Pow(long long base, int v)
             (res *= base) %= P;
     return res;
 }
-int Pow(int base, int b) {
+int Pow(int base, int b)
+{
     int ans = 1;
     while (b)
     {
-        if(b&1)
+        if (b & 1)
             ans *= base;
         base *= base;
         b >>= 1;
     }
     return ans;
 }
-
+const int k = 27737;
 long long quickpow(long long base, long long p)
 {
     long long ans = 1;
