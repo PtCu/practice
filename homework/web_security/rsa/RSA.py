@@ -102,14 +102,13 @@ def decrypt_word(c, d, n):
     return quick_pow(c, d, n)
 
 
-def display():
+def prompt():
     print("1.加密")
     print("2.解密")
-    print("3.推出")
     print("请输入选项：")
 
 
-def encrypt_word():
+def encrypt():
     file = open('homework/web_security/rsa/original.txt', "r")
     origin = file.read()
     file.close()
@@ -123,10 +122,10 @@ def encrypt_word():
    # print(s)
     file = open("homework/web_security/rsa/secure.txt", "w", encoding='utf-8')
     file.write(str(encrypted))
-    print("密文为",encrypted)
+    print("密文为",str(encrypted))
 
 
-def decrypt_word():
+def decrypt():
     file = open('homework/web_security/rsa/secure.txt', 'rb')
     secure = file.read().decode('utf-8')
     file.close()
@@ -139,15 +138,19 @@ def decrypt_word():
     file.write(str(resolved))
     print("明文为：",resolved)
 
-
-if __name__ == '__main__':
-    display()
+def main():
+    prompt()
     while True:
         c = input(">>>")
         if c == '1':
-            encrypt_word()
+            encrypt()
         if c == '2':
-            decrypt_word()
+            decrypt()
         if c == '3':
             exit(0)
-        display()
+        prompt()
+
+
+if __name__ == '__main__':
+    main()
+    
