@@ -25,11 +25,9 @@ def decrypt(S,ciphertext):
     i=j=0
     plaintext=''
     for char in ciphertext:
-
         i=(i+1)%256
         j=(j+S[i]) %256
         S[i],S[j]=S[j],S[i]
-
         c=chr(int(char,16) ^ S[(S[i] + S[j]) % 256])
         plaintext+=c
     return plaintext
