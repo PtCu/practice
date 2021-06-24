@@ -14,6 +14,28 @@
 // 边界：
 // dp[0] = 1。以nums[0]为末尾时能得到的最长不下降子列长度肯定为1，因为该子列就只有一个元素nums[0]。
 // 之后，从边界出发，通过状态转移方程，不断计算dp[]数组，dp[]数组中的最大值就是最长不下降子列的长度。
+
+int lengthOfLIS(vector<int> &nums)
+{
+    int n = (int)nums.size();
+    if (n == 0)
+    {
+        return 0;
+    }
+    vector<int> dp(n, 0);
+    for (int i = 0; i < n; ++i)
+    {
+        dp[i] = 1;
+        for (int j = 0; j < i; ++j)
+        {
+            if (nums[j] < nums[i])
+            {
+                dp[i] = max(dp[i], dp[j] + 1);
+            }
+        }
+    }
+    return *max_element(dp.begin(), dp.end());
+}
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn = 1e4 + 10;

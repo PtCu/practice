@@ -29,6 +29,34 @@ int LIS()
     int len = 1, n = nums.size();
     if (n == 0)
         return 0;
+   
+    for (int i = 0; i < n; ++i)
+    {
+        //换成lower_bound则是最长递增。注意区别
+        int pos = upper_bound(d , d + len , nums[i]) - d;
+        //如果可以接在len后面就接上，如果是最长上升子序列
+        if (pos == len)
+        {
+            d[len++] = nums[i];
+        }
+        //否则就找一个最该替换的替换掉
+        else
+        {
+            d[pos] = nums[i];
+        }
+
+    }
+    return len;
+}
+
+int lengthOfLIS(vector<int> &nums)
+{
+    int len = 1, n = (int)nums.size();
+    if (n == 0)
+    {
+        return 0;
+    }
+    vector<int> d(n + 1, 0);
     d[len] = nums[0];
     for (int i = 1; i < n; ++i)
     {
@@ -38,12 +66,27 @@ int LIS()
         }
         else
         {
-            int pos = upper_bound(d + 1, d + len + 1, nums[i]) - d;
-            d[pos] = nums[i];
+            int l = 1, r = len, pos = 0; // 如果找不到说明所有的数都比 nums[i] 大，此时要更新 d[1]，所以这里将 pos 设为 0
+            while (l <= r)
+            {
+                int mid = (l + r) >> 1;
+                if (d[mid] < nums[i])
+                {
+                    pos = mid;
+                    l = mid + 1;
+                }
+                else
+                {
+                    r = mid - 1;
+                }
+            }
+            //结束时，pos为小于nums[i]的最大秩
+            d[pos + 1] = nums[i];
         }
     }
     return len;
 }
+
 int main()
 {
     cout << LIS();

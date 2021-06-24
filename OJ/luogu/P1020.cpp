@@ -19,6 +19,7 @@ int main()
     asc.push_back(source[0]);
     for (size_t i = 1; i < source.size(); ++i)
     {
+        //单调降序列
         if (desc.back() >= source[i])
         {
             desc.push_back(source[i]); //如果不上升，就直接加入desc
@@ -29,6 +30,7 @@ int main()
             auto p1 = upper_bound(desc.begin(), desc.end(), source[i], greater<int>());
             *p1 = source[i];
         }
+        //单调升序列
         if (asc.back() < source[i])
         {
             asc.push_back(source[i]);

@@ -106,7 +106,7 @@ void completePacksack_opt()
 void multiPacksack(int M[])
 {
     int dp[100][100];
-    for (size_t i = 0; i < number; ++i)
+    for (size_t i = 1; i <= number; ++i)
     {
         for (size_t j = 1; j <= capacity; ++j)
         {
