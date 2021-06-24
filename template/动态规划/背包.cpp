@@ -67,7 +67,7 @@ void completePacksack()
 }
 
 //完全背包（时间优化）
-//j顺着做就行
+//和01背包的区别是j顺着做就行
 void completePacksack_opt_t()
 {
     int dp[100][100];

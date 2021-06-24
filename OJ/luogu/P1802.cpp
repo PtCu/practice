@@ -44,14 +44,16 @@ int main()
         {
             if (use[i] <= j && use[i] > 0)
             {
+                //不用药打不过,看是用药能打过还是不用药认输
                 dp2[j] = max(dp2[j - use[i]] + win[i], dp2[j] + lose[i]);
             }
             else if (use[i] == 0)
             {
+                //不用药就能打过
                 dp2[j] = dp2[j] + win[i];
             }
             else
-            {
+            { //use[i]>j,一定打不过
                 dp2[j] = dp2[j] + lose[i];
             }
         }

@@ -49,10 +49,13 @@ def get_prime(keylength):
 
 # 生成公钥和私钥
 def gen_keys(len):
+    # 要保证p和q为素数，且长度为len/2，这样相乘后n为len，
+    # 且此时求n的欧拉函数可以直接用公式求出
     p = get_prime(len / 2)
     q = get_prime(len / 2)
     n = p * q
     fn = (p - 1)*(q - 1)
+    # 计算e以及e的逆元d。之后将(n,e)作为公钥,(n,d)作为私钥
     e = get_e(fn)
     d = get_d(e, fn)
     return (n, e, d)
@@ -70,18 +73,16 @@ def get_e(fn):
 def get_d(e, fn):
     return mod_inverse(e, fn)
 
+
 # ax=1(mod b) 求a模b的乘法逆x
-
-
 def mod_inverse(a, b):
     arr = [0, 1, ]
     gcd = exgcd(a, b, arr)
     if gcd == 1:
         return(arr[0] % b+b) % b
 
+
 # 扩展欧几里得算法求逆
-
-
 def exgcd(a, b, arr):
     if b == 0:
         arr[0] = 1
@@ -95,10 +96,12 @@ def exgcd(a, b, arr):
 
 
 def encrypt_word(m, e, n):
+    #加密就是解 m^e=c(mod n)，算出c
     return quick_pow(m, e, n)
 
 
 def decrypt_word(c, d, n):
+    #解密就是解 c^d=m(mod n)，算出m
     return quick_pow(c, d, n)
 
 
