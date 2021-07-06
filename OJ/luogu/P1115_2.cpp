@@ -8,7 +8,9 @@ int main(){
     int ans = -99999;
     for (int i = 1; i <= n;++i){
         cin >> x;
-        dp[i] = max(dp[i - 1] + x, x); //dp[i-1]不小于0 or 小于0
+         //dp[i-1]不小于0 or 小于0
+         //也就是去除负前缀的意思。
+        dp[i] = max(dp[i - 1] + x, x);
         ans = max(dp[i], ans);
     }
     cout << ans;
