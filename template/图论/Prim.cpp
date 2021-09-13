@@ -16,7 +16,7 @@ vector<Edge> G[maxn];
 //prim更新的是未标记集合到已标记集合之间的距离(G[cur.second][i].cost)
 //Dijkstra更新的是源点到未标记集合之间的距离(G[cur.second][i].cost+D[cur.second])
 //注意与Dijkstra的区别
-int D[maxn];
+int D[maxn]; //源点到其他点的距离
 bool visited[maxn];
 int Prim(int s)
 {

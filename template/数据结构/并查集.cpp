@@ -10,7 +10,7 @@ void Union(int x, int y)
     int yf = find(y);
     if (xf == yf)
         return;
-    f[find(x)] = find(y);
+    f[xf] = yf;
 }
 //查
 //并查集思想就是用老大代表这个集合，操作时用find(x)代替x
