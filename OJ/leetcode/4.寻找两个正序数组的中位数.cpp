@@ -30,25 +30,30 @@ public:
         int index1 = 0, index2 = 0;
         while (true)
         {
-            // 边界情况
+            //退出条件：
+            //数组1到尽头了
             if (index1 == m)
             {
+                //就返回数组2的第k个数
                 return nums2[index2 + k - 1];
             }
+            //数组2到尽头了
             if (index2 == n)
             {
+                //就返回数组1的第k个数.注意下标是k-1
                 return nums1[index1 + k - 1];
             }
+            //求第1个数时，返回二者最小的
             if (k == 1)
             {
                 return min(nums1[index1], nums2[index2]);
             }
 
-            //正常情况
             int newIndex1 = min(index1 + k / 2 - 1, m - 1);
             int newIndex2 = min(index2 + k / 2 - 1, n - 1);
             int pivot1 = nums1[newIndex1];
             int pivot2 = nums2[newIndex2];
+            //每次只删除较小中位数的数组中的一半元素，而不是两个数组中各删一半
             if (pivot1 <= pivot2)
             {
                 k -= newIndex1 - index1 + 1;
