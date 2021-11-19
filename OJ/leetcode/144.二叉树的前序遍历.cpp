@@ -34,21 +34,21 @@ public:
         while (p)
         {
             ans.push_back(p->val);
-            S.push(p);
+            S.push(p->right);
             p = p->left;
         }
     }
     vector<int> preorderTraversal(TreeNode *root)
     {
-        vector<int> ans;
-        TreeNode *p = root;
         stack<TreeNode *> S;
+        auto p = root;
+        vector<int> ans;
         while (true)
         {
             visitAlongLeft(S, p, ans);
             if (S.empty())
                 break;
-            p = S.top()->right;
+            p = S.top();
             S.pop();
         }
         return ans;
