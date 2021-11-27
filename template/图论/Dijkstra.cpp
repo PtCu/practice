@@ -39,7 +39,7 @@ void Dijkstra(int s)
         int v = p.second; //v是已知阵营的点，作为当前节点；
         if (used[v])
             continue;
-        used[v] = 1;
+        used[v] = 1; //考察完v的所有邻居，才算访问过v。
         for (int i = 0; i < g[v].size(); i++)
         {
             //遍历所有后续边,算出距离最小的边并放入队列。队列自动从小到大排序，将最小的放在最前
