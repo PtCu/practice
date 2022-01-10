@@ -1,8 +1,22 @@
 #include <bits/stdc++.h>
 using namespace std;
-int d[] = {0, 1, 2, 3, 4, 5, 6, 7, 10, 12, 14};
-int main()
-{
-    int a = upper_bound(d + 1, d + 1 + 10, 20) - d;
-    cout << a;
+class A {
+
+public:
+    A() = default;
+    int i;
+};
+
+void f(A& a) {
+    auto& b = a;
+    b.i = 1;
+}
+int main() {
+    vector<int> nums{ 1,1,2,3,4 };
+    vector<int> origin;
+    origin.assign(nums.begin(), nums.end());
+    A a;
+    f(a);
+    return 0;
+
 }

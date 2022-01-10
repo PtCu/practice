@@ -42,3 +42,9 @@ reference/
 *.app
 
 *.docx
+
+*.bmp
+*.ppm
+
+explore.cpp
+for_copy.cpp
