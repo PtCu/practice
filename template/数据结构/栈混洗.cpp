@@ -22,6 +22,35 @@ bool isValid()
     else
         return false;
 }
+bool isValid2() {
+    int iA = 0, iB = 0;
+    stack<int>S;
+
+    while (iA < A.size())
+    {
+        while (S.empty() || S.top() != B[iB])
+        {
+            S.push(A[iA++]);
+        }
+        ++iB;
+        S.pop();
+    }
+
+    while (!S.empty())
+    {
+        if (S.top() != B[iB++]) {
+            return false;
+        }
+    }
+    return true;
+
+
+
+
+
+
+
+}
 int main()
 {
 

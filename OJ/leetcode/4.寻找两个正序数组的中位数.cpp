@@ -10,7 +10,7 @@ using namespace std;
 class Solution
 {
 public:
-    int getKthElement(const vector<int> &nums1, const vector<int> &nums2, int k)
+    int getKthElement(const vector<int>& nums1, const vector<int>& nums2, int k)
     {
         /* 主要思路：要找到第 k (k>1) 小的元素，那么就取 pivot1 = nums1[k/2-1] 和 pivot2 = nums2[k/2-1] 进行比较
          * 这里的 "/" 表示整除
@@ -67,7 +67,7 @@ public:
         }
     }
 
-    double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2)
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2)
     {
         int length = nums1.size() + nums2.size();
         if (length % 2 == 1)
