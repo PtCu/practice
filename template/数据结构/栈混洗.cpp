@@ -41,6 +41,7 @@ bool isValid2() {
         if (S.top() != B[iB++]) {
             return false;
         }
+        S.pop();
     }
     return true;
 

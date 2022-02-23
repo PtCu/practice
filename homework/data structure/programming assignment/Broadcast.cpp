@@ -51,8 +51,8 @@ int main()
     {
         int i, j;
         cin >> i >> j;
-        Arc* a = new Arc(i);    //必须new一个节点，不然循环结束后就没了
-        Arc* b = new Arc(j);
+        Arc *a = new Arc(i); //必须new一个节点，不然循环结束后就没了
+        Arc *b = new Arc(j);
         a->nextArc = nodelist[j].first;
         nodelist[j].first = a;
         b->nextArc = nodelist[i].first;

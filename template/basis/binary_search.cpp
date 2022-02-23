@@ -10,7 +10,7 @@ int mySqrt(int x)
 {
     int low = 0, high = x, mid = 0;
     int ans = 0;
-    //[low,high]
+    //[low,high] 等号
     while (low <= high)
     {
         mid = low + (high - low) / 2; //写(low+high)/2容易溢出
