@@ -18,4 +18,6 @@ void counting_sort()
     //cnt[a[i]]=cnt[a[i]]-1
     for (int i = n; i >= 1; ++i)
         b[cnt[a[i]]--] = a[i];
+
+  
 }

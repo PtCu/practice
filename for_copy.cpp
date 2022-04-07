@@ -1,55 +1,60 @@
-#include <algorithm>
-#include <cstdio>
+
+
+#include <bits/stdc++.h>
 using namespace std;
-const int N = 105;
-int n, m, ans;
 
-struct Node
+class Solution
 {
-    int a, b; // a 代表时间，b 代表价值
-    double f;
-} node[N];
-
-bool operator<(Node p, Node q) { return p.f > q.f; }
-
-int f(int t, int v)
-{ // 计算在当前时间下，剩余物品的最大价值
-    int tot = 0;
-    for (int i = 1; t + i <= n; i++)
-        if (v >= node[t + i].a)
+public:
+    vector<int> vis;
+    void dfs(vector<vector<int>> &res, vector<int> &nums, vector<int> &state, int start)
+    {
+        if (start == nums.size())
         {
-            v -= node[t + i].a;
-            tot += node[t + i].b;
+            res.push_back(state);
+            return;
         }
-        else
-            return (int)(tot + v * node[t + i].f);
-    return tot;
-}
+        for (int i = 0; i < nums.size(); ++i)
+        {
+            if (vis[i] || (i > 0 && nums[i] == nums[i - 1] && !vis[i - 1]))
+            {
+                continue;
+            }
+            state.push_back(nums[i]);
+            vis[i] = 1;
+            // swap(state[i], state[start]);
+            dfs(res, nums, state, start + 1);
+            // swap(state[i], state[start]);
+            vis[i] = 0;
+            state.pop_back();
+        }
+    }
 
-void work(int t, int p, int v)
-{
-    ans = max(ans, v);
-    if (t > n)
-        return; // 边界条件：只有n种物品
-    // 最优性剪枝
-    work(t + 1, p, v); 
-    work(t + 1, p - node[t].a, v + node[t].b);
-    if (node[t].a <= p)
-        work(t + 1, p - node[t].a, v + node[t].b); // 可行性剪枝
-    else
-        ;
-}
+    vector<vector<int>> permute(vector<int> &nums)
+    {
+        vis.resize(nums.size());
+        vector<vector<int>> ans;
+        vector<int> state;
+        sort(nums.begin(), nums.end());
+        dfs(ans, nums, state, 0);
+        return ans;
+    }
+};
 
 int main()
 {
-    scanf("%d %d", &m, &n);
-    for (int i = 1; i <= n; i++)
-    {
-        scanf("%d %d", &node[i].a, &node[i].b);
-        node[i].f = 1.0 * node[i].b / node[i].a; // f为性价比
-    }
-    sort(node + 1, node + n + 1); // 根据性价比排序
-    work(1, m, 0);
-    printf("%d\n", ans);
-    return 0;
+    // vector<int> a = {1, 2, 3, 4};
+    // Solution solution;
+    // auto b = solution.permute(a);
+
+        // for (auto i : b)
+    // {
+    //     for (auto j : i)
+    //     {
+    //         cout << j << " ";
+    //     }
+    //     cout << "\n";
+    // }
+    // return 0;
+   
 }
