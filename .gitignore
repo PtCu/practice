@@ -1,6 +1,6 @@
 *.exe
 # *.txt
-.vscode
+#.vscode
 *.code-workspace
 build
 # *.vcproj*
